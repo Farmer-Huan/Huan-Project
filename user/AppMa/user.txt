@@ -1,2 +1,24 @@
 # private folder
 # Commit & Check push 02
+
+# - pageRegist - 
+
+# ID
+# PASSWORD
+# PASSWORD again
+# E-mail
+
+# inputed data > variable
+# variable > DB Query
+
+# 1. Manager
+# 2. Clients
+
+# 1. Manager
+#  1) 전체 Clients 확인 가능
+#  2) Clients 삭제 가능 (?)
+
+# 2. Client
+#  1) 본인 정보 수정 및 추가 정보 기입가능
+#   - 추가 정보(이름, 전화번호, 주소)
+#  2) 회원 탈퇴 가능
