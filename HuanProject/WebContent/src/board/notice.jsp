@@ -8,7 +8,5 @@
 </head>
 <body>
 
-<h1>Hello Farmer Huan</h1>
-
 </body>
 </html>
