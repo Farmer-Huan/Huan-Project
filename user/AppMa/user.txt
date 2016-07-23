@@ -50,3 +50,16 @@
 
 # 3. 보안상 문제 
 #  - Get 방식으로 ID & Password를 넘길 때에 URL이 보이기 때문에 보안상 문제점이 있다.
+
+
+# DB 관련
+# 오라클 계정 생성
+# cmd에 들어가서 
+# sqlplus "/as sysdba"
+# create user 만들 아이디 identified by 패스워드;
+#  - 권한 부여하기 
+# grant resource, connect, dba to 만든아이디;
+
+
+# 작업 tablespace 지정 : alter user 아이디 default tablesapce users;
+# 임시 tablespace 지정 : alter user 아이디 temporary tablespace temp;
