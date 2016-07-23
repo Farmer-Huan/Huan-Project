@@ -14,5 +14,5 @@ hs_err_pid*
 /.project
 .metadata/*
 RemoteSystemsTempFiles/*
-/Server/*
+/Servers/*
 .classpath
