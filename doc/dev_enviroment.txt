@@ -1,0 +1,18 @@
+# Java
+jdk 1.8.0_101
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+
+# Tomcat
+tomcat 8.0.36
+http://tomcat.apache.org/download-80.cgi
+
+
+# Spring
+sts 3.8.0
+http://spring.io/tools/sts/all/
+
+
+# Oracle database
+oracle 11g Release 2
+http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
