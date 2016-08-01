@@ -30,21 +30,4 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-	<!-- 인코딩을 설정하는 부분입니다.  "/*"로 들어오는 모든 것들에 대해 UTF-8인코딩을 적용합니다.-->
- <filter>
-  <filter-name>encodingFilter</filter-name>
-  <filter-class>
-   org.springframework.web.filter.CharacterEncodingFilter
-  </filter-class>
-  <init-param>
-   <param-name>encoding</param-name>
-   <param-value>UTF-8</param-value>
-  </init-param>
- </filter>
- 
- <filter-mapping>
-  <filter-name>encodingFilter</filter-name>
-  <url-pattern>/*</url-pattern>
- </filter-mapping>
-
 </web-app>
