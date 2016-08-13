@@ -31,6 +31,8 @@ public class Main extends HttpServlet {
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 //		request.setCharacterEncoding("UTF-8");
 		
+//		response.sendRedirect("/src/main.jsp");
+		
 		RequestDispatcher dispatcher  = request.getRequestDispatcher("/WEB-INF/src/main.jsp");
 		dispatcher.forward(request, response);
 		System.out.println("한글 테스트2");
