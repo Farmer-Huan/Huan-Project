@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="Generator" content="EditPlus®">
@@ -10,7 +8,7 @@
 <meta name="Keywords" content="">
 <meta name="Description" content="">
 <!-- <link rel="stylesheet" href="./WEB-INF/css/layout.css" /> -->
-<link rel="stylesheet" href="./css/layout.css" />
+<link rel="stylesheet" href="../css/layout.css" />
 <!-- <link rel="text/css" href="<c:url value='/WEB-INF/css/layout.css'/>" /> -->
 <script type="text/javascript" src="/js/main.js"></script>
 
@@ -19,7 +17,7 @@
 <body>
 
 <div id="test">
-	<h3>Absolute Path is:<%= getServletContext().getRealPath("/") %> </h3>
+	<h3> Path : <%= getServletContext().getRealPath("/") %> </h3>
  	<input type="text" value="test1234" />
  	<input type="button" value="test1234" onclick="Test_01()"/>
 </div>
