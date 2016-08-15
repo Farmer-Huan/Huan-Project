@@ -33,7 +33,7 @@ public class Main extends HttpServlet {
 		
 //		response.sendRedirect("/src/main.jsp");
 		
-		RequestDispatcher dispatcher  = request.getRequestDispatcher("/src/main.jsp");
+		RequestDispatcher dispatcher  = request.getRequestDispatcher("/views/main.jsp");
 		dispatcher.forward(request, response);
 		System.out.println("한글 테스트2");
 	}

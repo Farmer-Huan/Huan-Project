@@ -8,9 +8,9 @@
 <meta name="Keywords" content="">
 <meta name="Description" content="">
 <!-- <link rel="stylesheet" href="./WEB-INF/css/layout.css" /> -->
-<link rel="stylesheet" href="../css/layout.css" />
+<link rel="stylesheet" type="text/css" href="./css/layout.css" />
 <!-- <link rel="text/css" href="<c:url value='/WEB-INF/css/layout.css'/>" /> -->
-<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="./js/main.js"></script>
 
 <title>HuanProject</title>
 </head>
@@ -20,18 +20,19 @@
 	<h3> Path : <%= getServletContext().getRealPath("/") %> </h3>
  	<input type="text" value="test1234" />
  	<input type="button" value="test1234" onclick="Test_01()"/>
+ 	<p></p>
 </div>
 	<div class="wrap">
 			<div class="header">
 				<div>
 					<div class="huanImg">
-						<img src="../img/FamHuan.png" />
 						<div class="login">
 							<div>
 								<a href="#">로그인</a> | 
 								<a href="#">회원가입</a>
 							</div>
 						</div>
+						<img src="./img/FamHuan.png" />
 					</div>
 				</div>
 				<div class="topMenu">
@@ -136,13 +137,13 @@
 							</table>
 
 							<div class="paging">
-								<a href="#" class="prev"><img src="./btn_prev.gif" /></a>
+								<a href="#" class="prev"><img src="./img/btn_prev.gif" /></a>
 								<strong><span>1</span></strong>
 								<a href="#"><span>2</span></a>
 								<a href="#"><span>3</span></a>
 								<a href="#"><span>4</span></a>
 								<a href="#"><span>5</span></a>
-								<a href="#" class="next"><img src="./btn_next.gif" /></a>
+								<a href="#" class="next"><img src="./img/btn_next.gif" /></a>
 							</div>
 						</div>
 					</div>
