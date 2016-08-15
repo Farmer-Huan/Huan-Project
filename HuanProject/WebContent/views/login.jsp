@@ -9,9 +9,9 @@
 <meta name="Keywords" content="">
 <meta name="Description" content="">
 <!-- <link rel="stylesheet" href="./WEB-INF/css/layout.css" /> -->
-<link rel="stylesheet" type="text/css" href="./css/layout.css" />
+<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 <!-- <link rel="text/css" href="<c:url value='/WEB-INF/css/layout.css'/>" /> -->
-<script type="text/javascript" src="./js/main.js"></script>
+<script type="text/javascript" src="../js/main.js"></script>
 
 <title>HuanProject</title>
 </head>
@@ -34,6 +34,7 @@
 		String sql = "select * from FH_TB_USER";
 		rs = stmt.executeQuery(sql);
 		
+		test = "1234";
 	} catch (ClassNotFoundException e) {
 		out.println(e.toString());
 	} catch (SQLException e) {
@@ -45,30 +46,25 @@
 	}
 %>
 
-<div id="test" width="500px">
+<div id="test">
 	<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 	<p>
-		<form method="post" action="./views/login.jsp">
-			<textblock>아이디:</textblock>
-		 	<input id="login_id" name="id" type="text" value="" /> <br/>
-		 	<textblock>비밀번호:</textblock>
-		 	<input id="login_pw" name="pw" type="text" value="" /> <br/>
-		 	<input type="submit" value="로그인" />
+	 	<h3>로그인</h3>
+	 
+	 	<form method="post" action="./main.jsp">
+	 		<input type="submit" value="session_test" />
+ 			<%
+		 		String id = (String) request.getParameter("id");
+		 		String pw = (String) request.getParameter("pw");
+		 		out.println(id);
+		 		if(id == "test" && pw == "1234") {
+		 		//	session.setAttribute("session_id", "session_test1234");
+		 		} else {
+		 			
+		 		}
+		 	%>
 	 	</form>
-		<%
-			Object session_id = session.getAttribute("session_id");
-			String sid = (String) session_id;
-			if(sid == "" || sid == null) {
-				out.println("session null");
-			} else {
-				out.println("session_id: " + session_id);
-			}
-		%>
-		</p>
- 	<p></p>
- 	<input type="button" value="regist.jsp" onclick="location.href='./views/regist.jsp'"/>
- 	<input type="button" value="memberlist.jsp" onclick="location.href='./views/memberlist.jsp'"/>
- 	<input type="button" value="insert.jsp" onclick="location.href='./views/insert.jsp'"/>
+ 	</p>
  	<p></p>
  	<table>
 	<%
@@ -98,7 +94,7 @@
 								<a href="#">회원가입</a>
 							</div>
 						</div>
-						<img src="./img/FamHuan.png" />
+						<img src="../img/FamHuan.png" />
 					</div>
 				</div>
 				<div class="topMenu">
@@ -203,13 +199,13 @@
 							</table>
 
 							<div class="paging">
-								<a href="#" class="prev"><img src="./img/btn_prev.gif" /></a>
+								<a href="#" class="prev"><img src="../img/btn_prev.gif" /></a>
 								<strong><span>1</span></strong>
 								<a href="#"><span>2</span></a>
 								<a href="#"><span>3</span></a>
 								<a href="#"><span>4</span></a>
 								<a href="#"><span>5</span></a>
-								<a href="#" class="next"><img src="./img/btn_next.gif" /></a>
+								<a href="#" class="next"><img src="../img/btn_next.gif" /></a>
 							</div>
 						</div>
 					</div>
