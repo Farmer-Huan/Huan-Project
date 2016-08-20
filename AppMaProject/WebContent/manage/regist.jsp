@@ -74,7 +74,7 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="../login.jsp">로 그 인</a></li>
+						<li><a href="login.jsp">로 그 인</a></li>
 						<li><a href="memberList.jsp">회원목록</a></li>
 						<li><a href="update.jsp">회원정보수정</a></li>
 						<li><a href="#">메뉴1-4</a></li>

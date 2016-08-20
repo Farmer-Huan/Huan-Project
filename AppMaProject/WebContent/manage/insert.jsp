@@ -6,6 +6,17 @@
 	
 	request.setCharacterEncoding("utf-8");
 
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+	String db_id = "kslsr";
+	String db_pwd = "1234";
+
+	int i = 0;
+
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	
+
 	String id = request.getParameter("id");
 	String pwd = request.getParameter("pwd");
 	String phone = request.getParameter("phone");
@@ -39,14 +50,6 @@
 		 
 	*/
 	
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String db_id = "kslsr";
-	String db_pwd = "1234";
-	int i = 0;
 	try {
 		Class.forName(driver);
 		out.println("jdbc 드라이브 메모리에 로드 <br/>");

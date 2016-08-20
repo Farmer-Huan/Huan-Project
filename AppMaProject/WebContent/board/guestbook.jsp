@@ -8,26 +8,26 @@
   <meta name="Keywords" content="">
   <meta name="Description" content="">
   <title>Document</title>
-  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
  </head>
  <body>
 	<div class="wrap">
 		<div class="header">
 			<div>
 				<div class="huanImg">
-					<img src="img/FamHuan.png" />
+					<img src="../img/FamHuan.png" />
 					<div class="login">
 						<div>
-							<a href="manage/login.jsp">로그인</a> | 
-							<a href="manage/regist.jsp">회원가입</a>
+							<a href="../manage/login.jsp">로그인</a> | 
+							<a href="../manage/regist.jsp">회원가입</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="topMenu">
 				<ul class="top_nav">
-					<li><a href="manage/memberList.jsp">회원관리</a></li>
-					<li><a href="#">메뉴2</a></li>
+					<li><a href="../manage/memberList.jsp">회원관리</a></li>
+					<li><a href="notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>
@@ -37,14 +37,15 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="#">메뉴1-1</a></li>
-						<li><a href="#">메뉴1-2</a></li>
-						<li><a href="#">메뉴1-3</a></li>
-						<li><a href="#">메뉴1-4</a></li>
+						<li><a href="writeList.jsp">전체 글 보기</a></li>
+						<li><a href="notice.jsp">공지사항</a></li>
+						<li><a href="free.jsp">자유게시판</a></li>
+						<li><a href="qna.jsp">묻고답하기</a></li>
+						<li><a href="guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
-					<div class="contentNav">메뉴1 &gt; 메뉴1-1</div>
+					<div class="contentNav">게시판 &gt; 공지사항 </div>
 					<div class="list">
 						<table>
 							<colgroup>
@@ -62,48 +63,6 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>10</td>
-									<td class="tl pl5"><a href="#">몰라</a></td>
-									<td>test</td>
-									<td>2016.08.09</td>
-								</tr>
-								<tr>
-									<td>9</td>
-									<td class="tl pl5"><a href="#">몰라</a></td>
-									<td>test</td>
-									<td>2016.08.09</td>
-								</tr>
-								<tr>
-									<td>8</td>
-									<td class="tl pl5"><a href="#">몰라</a></td>
-									<td>test</td>
-									<td>2016.08.09</td>
-								</tr>
-								<tr>
-									<td>7</td>
-									<td class="tl pl5"><a href="#">몰라</a></td>
-									<td>test</td>
-									<td>2016.08.09</td>
-								</tr>
-								<tr>
-									<td>6</td>
-									<td class="tl pl5"><a href="#">몰라</a></td>
-									<td>test</td>
-									<td>2016.08.09</td>
-								</tr>
-								<tr>
-									<td>5</td>
-									<td class="tl pl5"><a href="#">몰라</a></td>
-									<td>test</td>
-									<td>2016.08.09</td>
-								</tr>
-								<tr>
-									<td>4</td>
-									<td class="tl pl5"><a href="#">몰라</a></td>
-									<td>test</td>
-									<td>2016.08.09</td>
-								</tr>
 								<tr>
 									<td>3</td>
 									<td class="tl pl5"><a href="#">몰라</a></td>
@@ -126,13 +85,13 @@
 						</table>
 
 						<div class="paging">
-							<a href="#" class="prev"><img src="img/btn_prev.gif" /></a>
+							<a href="#" class="prev"><img src="../img/btn_prev.gif" /></a>
 							<strong><span>1</span></strong>
 							<a href="#"><span>2</span></a>
 							<a href="#"><span>3</span></a>
 							<a href="#"><span>4</span></a>
 							<a href="#"><span>5</span></a>
-							<a href="#" class="next"><img src="img/btn_next.gif" /></a>
+							<a href="#" class="next"><img src="../img/btn_next.gif" /></a>
 						</div>
 					</div>
 				</div>

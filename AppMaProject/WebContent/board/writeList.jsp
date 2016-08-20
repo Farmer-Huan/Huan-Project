@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.*" %>
 <!doctype html>
+<%@ page import = "java.sql.*" %>
 <html lang="ko">
  <head>
   <meta charset="UTF-8">
@@ -12,52 +12,55 @@
   <link rel="stylesheet" href="../css/layout.css" />
  </head>
  <body>
-		<div class="wrap">
-			<div class="header">
-				<div>
-					<div class="huanImg">
-						<img src="../img/FamHuan.png" />
-						<div class="login">
-							<div>
-								<a href="../login.jsp">로그인</a> | 
-								<a href="regist.jsp">회원가입</a>
-							</div>
+	<div class="wrap">
+		<div class="header">
+			<div>
+				<div class="huanImg">
+					<img src="../img/FamHuan.png" />
+					<div class="login">
+						<div>
+							<a href="../manage/login.jsp">로그인</a> | 
+							<a href="../manage/regist.jsp">회원가입</a>
 						</div>
 					</div>
 				</div>
-				<div class="topMenu">
-					<ul class="top_nav">
-						<li><a href="../main.jsp">메인화면</a></li>
-						<li><a href="#">메뉴2</a></li>
-						<li><a href="#">메뉴3</a></li>
-						<li><a href="#">메뉴4</a></li>
+			</div>
+			<div class="topMenu">
+				<ul class="top_nav">
+					<li><a href="../manage/memberList.jsp">회원관리</a></li>
+					<li><a href="notice.jsp">게시판</a></li>
+					<li><a href="#">메뉴3</a></li>
+					<li><a href="#">메뉴4</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="contentWrap">
+			<div class="listWrap">
+				<div class="left">
+					<ul>
+						<li><a href="writeList.jsp">전체 글 보기</a></li>
+						<li><a href="notice.jsp">공지사항</a></li>
+						<li><a href="free.jsp">자유게시판</a></li>
+						<li><a href="qna.jsp">묻고답하기</a></li>
+						<li><a href="guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
-			</div>
-			<div class="contentWrap">
-				<div class="listWrap">
-					<div class="left">
-						<ul>
-							<li><a href="regist.jsp">회 원 가 입</a></li>
-							<li><a href="update.jsp">회원정보수정</a></li>
-							<li><a href="delete.jsp">회 원 탈 퇴</a></li>
-							<li><a href="memberUpdate.jsp">회 원 관 리</a></li>
-						</ul>
-					</div>
-					<div class="content">
-						<div class="contentNav">회원관리 &gt; 리스트</div>
-						<div class="list">
+				<div class="content">
+					<div class="contentNav">게시판 &gt; 공지사항 </div>
+					<div class="list">
+						<form method = "post" name = "writeForm" action = "writeFormProc.jsp">
 							<table>
 								<colgroup>
-									<col width="100px" />
+									<col width="80px" />
 									<col width="*" />
+									<col width="80px" />
+									<col width="80px" />
 								</colgroup>
 								<thead>
 									<tr>
-										<th>아이디</th>
-										<th>비밀번호</th>
-										<th>전화번호</th>
-										<th>이메일</th>
+										<th>글번호</th>
+										<th>제목</th>
+										<th>글쓴이</th>
 										<th>등록일</th>
 									</tr>
 								</thead>
@@ -79,24 +82,22 @@
 									  	// 결과 값을 출력하기 위한 방법
 									  	stmt = conn.createStatement();
 									
-									  	String sql = "select * from member";
+									  	String sql = "select * from fh_tb_board";
 									  	
 									  	rs = stmt.executeQuery(sql);
 								%>	
 								<tbody>
 									<%
 										while(rs.next()){
-											String id = rs.getString("id");
-											String pwd = rs.getString("pwd");
-											String phone = rs.getString("phone");
-											String email = rs.getString("email");
+											String id = rs.getString("idx");
+											String pwd = rs.getString("title");
+											String phone = rs.getString("id");
 											Timestamp regdate = rs.getTimestamp("regdate");
 									%>
 									<tr>
+										<td><%= rs.getObject("idx") %></td>
+										<td><%= rs.getObject("title") %></td>
 										<td><%= rs.getObject("id") %></td>
-										<td><%= rs.getObject("pwd") %></td>
-										<td><%= rs.getObject("phone") %></td>
-										<td><%= rs.getObject("email") %></td>
 										<td><%= rs.getObject("regdate") %></td>
 									</tr>
 									<%
@@ -123,21 +124,15 @@
 									}
 								%>
 							</table>
-							
-							<div class="paging">
-								<a href="#" class="prev"><img src="../img/btn_prev.gif" /></a>
-								<strong><span>1</span></strong>
-								<a href="#"><span>2</span></a>
-								<a href="#"><span>3</span></a>
-								<a href="#"><span>4</span></a>
-								<a href="#"><span>5</span></a>
-								<a href="#" class="next"><img src="../img/btn_next.gif" /></a>
-							</div>
+						</form>
+						<div class = "btn">
+							<a href = "writeForm.jsp" class = "btn_g">글 쓰기</a>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="footer"><span>copy right</span></div>
 		</div>
+		<div class="footer"><span>copy right</span></div>
+	</div>
  </body>
 </html>
