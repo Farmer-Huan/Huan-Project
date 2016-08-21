@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -26,8 +27,8 @@
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 
 		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String id = "chandler";
-		String pw = "test1234";
+		String id = DBConfig.DB_ID;
+		String pw = DBConfig.DB_PW;
 
 		conn = DriverManager.getConnection(url, id, pw);
 		stmt = conn.createStatement();
