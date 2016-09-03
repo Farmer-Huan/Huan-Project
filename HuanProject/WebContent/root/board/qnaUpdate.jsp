@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 	Connection conn = null;
@@ -13,6 +14,9 @@
 				content = "",
 				regdate = "";
 	
+	String dbID = DBConfig.DB_ID;
+	String dbPW = DBConfig.DB_PW;
+	
 	if(request.getParameter("qno") != null){
 		idx = request.getParameter("qno");
 	}else{
@@ -22,7 +26,7 @@
 	String upquery = "select idx,id,pwd,title,content,regdate from fh_tb_qna where idx=" + idx;
 
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","paul","3159");
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery(upquery);
 %>
