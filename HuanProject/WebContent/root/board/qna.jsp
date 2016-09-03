@@ -27,7 +27,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="../../css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
@@ -37,7 +37,15 @@
 	<div id="test" width="500px">
 		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 		<p>
-			<form method="post" action="../../views/login.jsp">
+			<%
+				Object session_id = session.getAttribute("session_id");
+				Object session_pw = session.getAttribute("session_pw");
+				String sid = (String) session_id;
+				String spw = (String) session_pw;
+				
+				if(sid == "" || sid == null) {
+			%>
+			<form method="post" action="/views/login.jsp">
 				<textblock>아이디:</textblock>
 			 	<input id="login_id" name="id" type="text" value="" /> <br/>
 			 	<textblock>비밀번호:</textblock>
@@ -45,19 +53,21 @@
 			 	<input type="submit" value="로그인" />
 		 	</form>
 			<%
-				Object session_id = session.getAttribute("session_id");
-				String sid = (String) session_id;
-				if(sid == "" || sid == null) {
-					out.println("session null");
 				} else {
-					out.println("session_id: " + session_id);
+			%>
+			<div class="ft12">
+				<%=session_id %>님 하이헬로안녕?<br>
+				네 비밀번호는 <%=session_pw %> 란다. 기억하니?<br>
+				<input type="button" value = "LOGOUT인 척 메인으로 가기" onclick = "location.href='/views/main.jsp'"/>
+			</div>
+			<%
 				}
 			%>
 			</p>
 	 	<p></p>
-	 	<input type="button" value="regist.jsp" onclick="location.href='../../views/regist.jsp'"/>
-	 	<input type="button" value="memberlist.jsp" onclick="location.href='../../views/memberlist.jsp'"/>
-	 	<input type="button" value="insert.jsp" onclick="location.href='../../views/insert.jsp'"/>
+	 	<input type="button" value="regist.jsp" onclick="location.href='/views/regist.jsp'"/>
+	 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/memberlist.jsp'"/>
+	 	<input type="button" value="insert.jsp" onclick="location.href='/views/insert.jsp'"/>
 	 	<p></p>
 	 	
 	</div>
@@ -71,7 +81,7 @@
 							<a href="#">회원가입</a>
 						</div>
 					</div>
-					<img src="../../img/FamHuan.png" />
+					<img src="/img/FamHuan.png" />
 				</div>
 			</div>
 			<div class="topMenu">
@@ -89,8 +99,8 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/HuanProject/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/HuanProject/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
+						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
@@ -122,7 +132,7 @@
 %>
 								<tr>
 									<td><%=idx%></td>
-									<td class="tl pl5"><a href="http://localhost:8080/HuanProject/root/board/qnaRead.jsp?qno=<%=idx%>"><%=title%></a></td>
+									<td class="tl pl5"><a href="http://localhost:8080/root/board/qnaRead.jsp?qno=<%=idx%>"><%=title%></a></td>
 									<td><%=id%></td>
 									<td><%=regdate%></td>
 								</tr>
@@ -139,16 +149,16 @@
 							</tbody>
 						</table>
 						<div>
-							<input type = "button" value = "CREATE" onclick = "location.href='./qnaCreate.jsp'">
+							<input type = "button" value = "CREATE" onclick = "location.href='/root/board/qnaCreate.jsp'">
 						</div>
 						<div class="paging">
-							<a href="#" class="prev"><img src="../../img/btn_prev.gif" /></a>
+							<a href="#" class="prev"><img src="/img/btn_prev.gif" /></a>
 							<strong><span>1</span></strong>
-							<a href="http://localhost:8080/HuanProject/root/board/qna.jsp?pagenum=2"><span>2</span></a>
-							<a href="http://localhost:8080/HuanProject/root/board/qna.jsp?pagenum=3"><span>3</span></a>
-							<a href="http://localhost:8080/HuanProject/root/board/qna.jsp?pagenum=4"><span>4</span></a>
-							<a href="http://localhost:8080/HuanProject/root/board/qna.jsp?pagenum=5"><span>5</span></a>
-							<a href="#" class="next"><img src="../../img/btn_next.gif" /></a>
+							<a href="http://localhost:8080/root/board/qna.jsp?pagenum=2"><span>2</span></a>
+							<a href="http://localhost:8080/root/board/qna.jsp?pagenum=3"><span>3</span></a>
+							<a href="http://localhost:8080/root/board/qna.jsp?pagenum=4"><span>4</span></a>
+							<a href="http://localhost:8080/root/board/qna.jsp?pagenum=5"><span>5</span></a>
+							<a href="#" class="next"><img src="/img/btn_next.gif" /></a>
 						</div>
 					</div>
 				</div>
