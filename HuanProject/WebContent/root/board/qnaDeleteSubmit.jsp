@@ -1,18 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
 	
+	String dbID = DBConfig.DB_ID;
+	String dbPW = DBConfig.DB_PW;
+	
 	String idx = request.getParameter("qno");
 	int idx2 = Integer.parseInt(idx);
 	String delquery = "delete from fh_tb_qna where idx=" + idx2;
 	
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","paul","3159");
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery(delquery);
 %>
@@ -89,7 +93,9 @@
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
 					<div class="list">
-						<input type = "button" value = "삭제하였습니다.(여기에 제발 글씨만 넣어보고 싶다 개죤니씨뽤ㄹㅓㅁ쟈ㅐㄷ거쟏ㅁ섣쟈ㅐ헞ㅁ댜ㅐ헏쟈ㅐ헞댜ㅐ헞대ㅑㅎ!!)">
+						<div class="ft12">
+						삭제하였습니다.
+						</div>
 						<div>
 							<input type = "button" value = "back to LIST" onclick = "location.href='./qna.jsp'">
 						</div>

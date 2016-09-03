@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 	Connection conn = null;
@@ -12,6 +13,9 @@
 				title = "",
 				content = "";
 	
+	String dbID = DBConfig.DB_ID;
+	String dbPW = DBConfig.DB_PW;
+	
 	request.setCharacterEncoding("UTF-8"); //한글 깨짐 처리
 	
 	title = request.getParameter("title");
@@ -22,7 +26,7 @@
 	String upquery = "update fh_tb_qna set title='"+title+"', content ='"+content+"' where idx =" +idx2;
 	
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","paul","3159");
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery(upquery);
 %>
@@ -100,7 +104,9 @@
 					<div class="contentNav">게시판 &gt; QnA</div>
 					
 					<div class="list">
-						<input type = "button" value = "수정하였습니다.(여기에 제발 글씨만 넣어보고 싶다 개죤니씨뽤ㄹㅓㅁ쟈ㅐㄷ거쟏ㅁ섣쟈ㅐ헞ㅁ댜ㅐ헏쟈ㅐ헞댜ㅐ헞대ㅑㅎ!!)">
+						<div class="ft12">
+						수정하였습니다.
+						</div>
 						<div>
 							<input type = "button" value = "back to LIST" onclick = "location.href='./qna.jsp'">
 						</div>

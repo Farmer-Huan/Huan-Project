@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 	Connection conn = null;
@@ -12,10 +13,13 @@
 				title = "",
 				regdate = "";
 	
+	String dbID = DBConfig.DB_ID;
+	String dbPW = DBConfig.DB_PW;
+	
 	int count = 0;
 	
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","paul","3159");
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery("select rownum,idx,id,title,regdate from fh_tb_qna order by idx desc");	
 %>
