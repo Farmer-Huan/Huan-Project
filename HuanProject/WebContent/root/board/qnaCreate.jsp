@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel = "stylesheet" type = "text/css" href = "../../css/layout.css">
+<link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
@@ -14,7 +14,7 @@
 	<div id="test" width="500px">
 		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 		<p>
-			<form method="post" action="../../views/login.jsp">
+			<form method="post" action="/views/login.jsp">
 				<textblock>아이디:</textblock>
 			 	<input id="login_id" name="id" type="text" value="" /> <br/>
 			 	<textblock>비밀번호:</textblock>
