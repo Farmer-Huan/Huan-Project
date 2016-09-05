@@ -28,7 +28,7 @@
 			<div class="topMenu">
 				<ul class="top_nav">
 					<li><a href="/views/manage/memberList.jsp">회원관리</a></li>
-					<li><a href="/views/notice/notice.jsp">게시판</a></li>
+					<li><a href="/views/board/notice/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>
@@ -39,9 +39,9 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="/manage/login.jsp">로 그 인</a></li>
-						<li><a href="/manage/memberList.jsp">회원목록</a></li>
-						<li><a href="/manage/update.jsp">회원정보수정</a></li>
+						<li><a href="/views/manage/login.jsp">로 그 인</a></li>
+						<li><a href="/views/manage/memberList.jsp">회원목록</a></li>
+						<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
 						<li><a href="#">메뉴1-4</a></li>
 					</ul>
 				</div>
@@ -101,7 +101,7 @@
 									</tr>
 									<tr>
 										<th>비밀번호 확인</th>
-										<td><input type="password" name = "pwd_check" value ="<%= pwd %> "/></td>
+										<td><input type="password" name = "pwd_check" value ="<%= pwd %>"/></td>
 									</tr>
 									<tr>
 										<th>전화번호</th>

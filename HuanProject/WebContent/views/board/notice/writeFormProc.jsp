@@ -61,7 +61,7 @@
 <script type = "text/javascript">
 	if(<%= i %> > 0){
 		alert("글이 등록되었습니다..");
-		location.href = "/views/notice/writeList.jsp";
+		location.href = "/views/board/notice/writeList.jsp";
 	} else {
 		alert("글 등록 실패 ");
 		history.go(-1);
