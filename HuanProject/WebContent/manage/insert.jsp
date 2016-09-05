@@ -1,11 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
 <%@ page import = "java.sql.*" %>
-<%@ page import = "com.farmer.huan.DBConfig" %>
 
 <%
 	
 	request.setCharacterEncoding("utf-8");
+
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+	String db_id = "kslsr";
+	String db_pwd = "1234";
+
+	int i = 0;
+
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	
 
 	String id = request.getParameter("id");
 	String pwd = request.getParameter("pwd");
@@ -40,14 +50,6 @@
 		 
 	*/
 	
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String db_id = DBConfig.DB_ID;
-	String db_pwd = DBConfig.DB_PW;
-	
 	try {
 		Class.forName(driver);
 		out.println("jdbc 드라이브 메모리에 로드 <br/>");
@@ -79,8 +81,8 @@
 		
 		
 		String strQuery = "insert into member" +
-							"(idx, id, pwd, phone, email)" + 
-							"values (idx_seq.nextval, ?, ?, ?, ?)";
+							"(idx, id, pwd, phone, email, regdate)" +
+							"values (idx_seq.nextval, ?, ?, ?, ?, sysdate)";
 		// conn 객체의 prepareStatement 메소드를 실행
 		pstmt = conn.prepareStatement(strQuery);
 		out.println("PreparedStatement 객체 얻기");
@@ -89,7 +91,7 @@
 		pstmt.setString(3, phone);
 		pstmt.setString(4, email);
 		
-		int i = pstmt.executeUpdate();
+		i = pstmt.executeUpdate();
 		out.println("쿼리 실행");
 		out.println(i + " 개의 행이 추가 되었습니다..");
 		
@@ -114,3 +116,14 @@
 		}
 	}
 %>
+<!--  밑에 스크립트가 없을 경우 회원 가입에 대한 로그 확인이 가능하다. -->
+<script type = "text/javascript">
+
+		if(<%= i %> > 0){
+			alert("회원가입 되었습니다.");
+			location.href = "../login.jsp";
+		} else {
+			alert("회원가입 실패");
+			history.go(-1);
+		}
+	</script>
