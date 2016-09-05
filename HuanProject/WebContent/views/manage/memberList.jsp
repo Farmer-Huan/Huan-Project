@@ -3,32 +3,32 @@
 <!doctype html>
 <html lang="ko">
  <head>
-  <meta charset="UTF-8">
-  <meta name="Generator" content="EditPlus®">
-  <meta name="Author" content="">
-  <meta name="Keywords" content="">
-  <meta name="Description" content="">
-  <title>Document</title>
-  <link rel="stylesheet" href="../css/layout.css" />
+<meta charset="UTF-8">
+<meta name="Generator" content="EditPlus®">
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<title>Document</title>
+<link rel="stylesheet" href="/css/layout.css" />
  </head>
  <body>
 		<div class="wrap">
 			<div class="header">
 				<div>
 					<div class="huanImg">
-						<img src="../img/FamHuan.png" />
+						<img src="/img/FamHuan.png" />
 						<div class="login">
 							<div>
-								<a href="../login.jsp">로그인</a> | 
-								<a href="regist.jsp">회원가입</a>
+								<a href="/views/manage/login.jsp">로그인</a> | 
+								<a href="/views/manage/regist.jsp">회원가입</a>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="topMenu">
 					<ul class="top_nav">
-						<li><a href="../main.jsp">메인화면</a></li>
-						<li><a href="#">메뉴2</a></li>
+						<li><a href="/">메인화면</a></li>
+						<li><a href="/views/board/notice.jsp">게시판</a></li>
 						<li><a href="#">메뉴3</a></li>
 						<li><a href="#">메뉴4</a></li>
 					</ul>
@@ -38,10 +38,10 @@
 				<div class="listWrap">
 					<div class="left">
 						<ul>
-							<li><a href="regist.jsp">회 원 가 입</a></li>
-							<li><a href="update.jsp">회원정보수정</a></li>
-							<li><a href="delete.jsp">회 원 탈 퇴</a></li>
-							<li><a href="memberUpdate.jsp">회 원 관 리</a></li>
+							<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
+							<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
+							<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
+							<li><a href="/views/manage/memberUpdate.jsp">회 원 관 리</a></li>
 						</ul>
 					</div>
 					<div class="content">
@@ -49,11 +49,16 @@
 						<div class="list">
 							<table>
 								<colgroup>
-									<col width="100px" />
+									<col width="50px" />
 									<col width="*" />
+									<col width="*" />
+									<col width="*" />
+									<col width="*" />
+									<col width="150px" />
 								</colgroup>
 								<thead>
 									<tr>
+										<th>번호</th>
 										<th>아이디</th>
 										<th>비밀번호</th>
 										<th>전화번호</th>
@@ -79,7 +84,7 @@
 									  	// 결과 값을 출력하기 위한 방법
 									  	stmt = conn.createStatement();
 									
-									  	String sql = "select * from member";
+									  	String sql = "select * from fh_tb_user order by idx desc";
 									  	
 									  	rs = stmt.executeQuery(sql);
 								%>	
@@ -93,11 +98,12 @@
 											Timestamp regdate = rs.getTimestamp("regdate");
 									%>
 									<tr>
-										<td><%= rs.getObject("id") %></td>
-										<td><%= rs.getObject("pwd") %></td>
-										<td><%= rs.getObject("phone") %></td>
-										<td><%= rs.getObject("email") %></td>
-										<td><%= rs.getObject("regdate") %></td>
+										<td><%= rs.getObject("idx") %></td>
+										<td><%= id %></td>
+										<td><%= pwd %></td>
+										<td><%= phone %></td>
+										<td><%= email %></td>
+										<td><%= regdate %></td>
 									</tr>
 									<%
 										}
@@ -125,13 +131,13 @@
 							</table>
 							
 							<div class="paging">
-								<a href="#" class="prev"><img src="../img/btn_prev.gif" /></a>
+								<a href="#" class="prev"><img src="/img/btn_prev.gif" /></a>
 								<strong><span>1</span></strong>
 								<a href="#"><span>2</span></a>
 								<a href="#"><span>3</span></a>
 								<a href="#"><span>4</span></a>
 								<a href="#"><span>5</span></a>
-								<a href="#" class="next"><img src="../img/btn_next.gif" /></a>
+								<a href="#" class="next"><img src="/img/btn_next.gif" /></a>
 							</div>
 						</div>
 					</div>

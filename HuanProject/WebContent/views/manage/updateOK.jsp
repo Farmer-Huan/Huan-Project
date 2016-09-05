@@ -33,7 +33,9 @@
 
 			conn = DriverManager.getConnection(url, db_id, db_pwd);
 			// update [테이블] set [열] = '변경할값' where [조건]
-			String strQuery = "update member set pwd = ?, phone = ?, email = ? where id = ?";
+			String strQuery = "update fh_tb_user " + 
+								"set pwd = ?, phone = ?, email = ? " +
+								"where id = ?";
 
 			pstmt = conn.prepareStatement(strQuery);
 
@@ -59,10 +61,11 @@
 			}
 		}
 	%>
+	
 	<script type = "text/javascript">
 		if(<%= n %> > 0){
 			alert("회원정보가 수정되었습니다.");
-			location.href = "memberList.jsp";
+			location.href = "/views/manage/memberList.jsp";
 		} else {
 			alert("회원정보 수정실패");
 			history.go(-1);

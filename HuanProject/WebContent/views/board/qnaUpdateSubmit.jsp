@@ -13,9 +13,6 @@
 				title = "",
 				content = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
-	
 	request.setCharacterEncoding("UTF-8"); //한글 깨짐 처리
 	
 	title = request.getParameter("title");
@@ -23,10 +20,12 @@
 	idx = request.getParameter("idx");
 	int idx2 = Integer.parseInt(idx);
 	
-	String upquery = "update fh_tb_qna set title='"+title+"', content ='"+content+"' where idx =" +idx2;
+	String upquery = "update fh_tb_qna " + 
+					"set title='"+title+"', content ='"+content+"' " + 
+					"where idx =" +idx2;
 	
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery(upquery);
 %>
@@ -52,7 +51,7 @@
 				
 				if(sid == "" || sid == null) {
 			%>
-			<form method="post" action="/views/login.jsp">
+			<form method="post" action="/views/manage/login.jsp">
 				<textblock>아이디:</textblock>
 			 	<input id="login_id" name="id" type="text" value="" /> <br/>
 			 	<textblock>비밀번호:</textblock>
@@ -65,16 +64,16 @@
 			<div class="ft12">
 				<%=session_id %>님 하이헬로안녕?<br>
 				네 비밀번호는 <%=session_pw %> 란다. 기억하니?<br>
-				<input type="button" value = "LOGOUT인 척 메인으로 가기" onclick = "location.href='/views/main.jsp'"/>
+				<input type="button" value = "LOGOUT인 척 메인으로 가기" onclick = "location.href='/'"/>
 			</div>
 			<%
 				}
 			%>
 			</p>
 	 	<p></p>
-	 	<input type="button" value="regist.jsp" onclick="location.href='/views/regist.jsp'"/>
-	 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/memberlist.jsp'"/>
-	 	<input type="button" value="insert.jsp" onclick="location.href='/views/insert.jsp'"/>
+	 	<input type="button" value="regist.jsp" onclick="location.href='/views/manage/regist.jsp'"/>
+	 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/manage/memberlist.jsp'"/>
+	 	<input type="button" value="insert.jsp" onclick="location.href='/views/manage/insert.jsp'"/>
 	 	<p></p>
 	 	
 	</div>
@@ -106,8 +105,8 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="/views/board/qna.jsp">QnA</a></li>
+						<li><a href="/views/board/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
@@ -118,7 +117,7 @@
 						수정하였습니다.
 						</div>
 						<div>
-							<input type = "button" value = "back to LIST" onclick = "location.href='/root/board/qna.jsp'">
+							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna.jsp'">
 						</div>
 					</div>
 				</div>

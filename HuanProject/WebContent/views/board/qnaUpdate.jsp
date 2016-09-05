@@ -14,19 +14,17 @@
 				content = "",
 				regdate = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
-	
 	if(request.getParameter("qno") != null){
 		idx = request.getParameter("qno");
 	}else{
 		idx = "0";
 	}
 	
-	String upquery = "select idx,id,pwd,title,content,regdate from fh_tb_qna where idx=" + idx;
+	String upquery = "select idx,id,pwd,title,content,regdate " + 
+					"from fh_tb_qna where idx=" + idx;
 
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery(upquery);
 %>
@@ -52,7 +50,7 @@
 				
 				if(sid == "" || sid == null) {
 			%>
-			<form method="post" action="/views/login.jsp">
+			<form method="post" action="/views/manage/login.jsp">
 				<textblock>아이디:</textblock>
 			 	<input id="login_id" name="id" type="text" value="" /> <br/>
 			 	<textblock>비밀번호:</textblock>
@@ -65,16 +63,16 @@
 			<div class="ft12">
 				<%=session_id %>님 하이헬로안녕?<br>
 				네 비밀번호는 <%=session_pw %> 란다. 기억하니?<br>
-				<input type="button" value = "LOGOUT인 척 메인으로 가기" onclick = "location.href='/views/main.jsp'"/>
+				<input type="button" value = "LOGOUT인 척 메인으로 가기" onclick = "location.href='/'"/>
 			</div>
 			<%
 				}
 			%>
 			</p>
 	 	<p></p>
-	 	<input type="button" value="regist.jsp" onclick="location.href='/views/regist.jsp'"/>
-	 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/memberlist.jsp'"/>
-	 	<input type="button" value="insert.jsp" onclick="location.href='/views/insert.jsp'"/>
+	 	<input type="button" value="regist.jsp" onclick="location.href='/views/manage/regist.jsp'"/>
+	 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/manage/memberlist.jsp'"/>
+	 	<input type="button" value="insert.jsp" onclick="location.href='/views/manage/insert.jsp'"/>
 	 	<p></p>
 	 	
 	</div>
@@ -106,15 +104,15 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="/views/board/qna.jsp">QnA</a></li>
+						<li><a href="/views/board/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
 					<div class="list">
 						
-						<form method = "post" name = "qnaupdate" action = "http://localhost:8080/root/board/qnaUpdateSubmit.jsp">
+						<form method = "post" name = "qnaupdate" action = "/views/board/qnaUpdateSubmit.jsp">
 							<table>
 								<colgroup>
 									<col width="80px" />
@@ -128,13 +126,13 @@
 										<th></th>
 									</tr>
 								</thead>		
-<%
-	if(rs != null){
-		while(rs.next()){
-			title = rs.getString("title");
-			content = rs.getString("content");
-		}
-%>
+								<%
+									if(rs != null){
+										while(rs.next()){
+											title = rs.getString("title");
+											content = rs.getString("content");
+										}
+								%>
 								<tbody>
 									<tr><td><input type = "hidden" name = "idx" value ="<%=idx%>"></td></tr>
 									<tr>
@@ -146,14 +144,14 @@
 										<td colspan="4"><input type = "text" name = "content" value = "<%=content%>"></td>
 									</tr>
 								</tbody>
-<%			
-		}//end if
-%>
+								<%			
+										}//end if
+								%>
 							</table>	
 							
 							<div>
 								<input type = "submit" value = "SUBMIT">
-								<input type = "button" value = "CANCEL" onclick = "location.href='/root/board/qnaRead.jsp?qno=<%=idx%>'">
+								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qnaRead.jsp?qno=<%=idx%>'">
 							</div>
 						</form>
 						

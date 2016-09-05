@@ -9,26 +9,26 @@
 	<meta name="Keywords" content="">
 	<meta name="Description" content="">
 	<title>Document</title>
-	<link rel="stylesheet" href="../css/layout.css" />
+	<link rel="stylesheet" href="/css/layout.css" />
 </head>
 <body>
 	<div class="wrap">
 		<div class="header">
 			<div>
 				<div class="huanImg">
-					<img src="../img/FamHuan.png" />
+					<img src="/img/FamHuan.png" />
 					<div class="login">
 						<div>
-							<a href="../main.jsp">메인화면</a> | 
-							<a href="../login.jsp">로그인</a>
+							<a href="/">메인화면</a> | 
+							<a href="/views/manage/login.jsp">로그인</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="topMenu">
 				<ul class="top_nav">
-					<li><a href="memberList.jsp">회원관리</a></li>
-					<li><a href="#">메뉴2</a></li>
+					<li><a href="/views/manage/memberList.jsp">회원관리</a></li>
+					<li><a href="/views/board/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>
@@ -39,9 +39,9 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="../login.jsp">로 그 인</a></li>
-						<li><a href="memberList.jsp">회원목록</a></li>
-						<li><a href="update.jsp">회원정보수정</a></li>
+						<li><a href="/manage/login.jsp">로 그 인</a></li>
+						<li><a href="/manage/memberList.jsp">회원목록</a></li>
+						<li><a href="/manage/update.jsp">회원정보수정</a></li>
 						<li><a href="#">메뉴1-4</a></li>
 					</ul>
 				</div>
@@ -66,7 +66,9 @@
 							try {
 								Class.forName(driver);
 								conn = DriverManager.getConnection(url, db_id, db_pwd);
-								String strQuery = "select * from member where id = ?";
+								// where = 조건
+								String strQuery = "select * from fh_tb_user " + 
+													"where id = ?";
 							
 								pstmt = conn.prepareStatement(strQuery);
 							
@@ -82,7 +84,7 @@
 									String email = rs.getString("email");
 									Timestamp regdate = rs.getTimestamp("regdate");
 						%>
-						<form method = "post" name = "upForm" id = "upForm" action = "updateOK.jsp">
+						<form method = "post" name = "upForm" id = "upForm" action = "/views/manage/updateOK.jsp">
 							<table>
 								<colgroup>
 									<col width="100px" />
@@ -139,14 +141,14 @@
 						%>
 						<div class = "btn">
 							<a href = "javascript:upForm.submit();">저장</a>
-							<a href = "memberList.jsp">회원목록</a>
+							<a href = "/views/manage/memberList.jsp">회원목록</a>
 						</div>
 						<script>	
 							function update(){
 								document.upForm.submit();
 							}
 							function list(){
-								location.href = "memberList.jsp";
+								location.href = "/views/manage/memberList.jsp";
 							}
 						</script>
 					</div>

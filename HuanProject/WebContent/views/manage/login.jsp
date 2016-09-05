@@ -9,26 +9,26 @@
   <meta name="Keywords" content="">
   <meta name="Description" content="">
   <title>Document</title>
-  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
  </head>
  <body>
 	<div class="wrap">
 		<div class="header">
 			<div>
 				<div class="huanImg">
-					<img src="../img/FamHuan.png" />
+					<img src="/img/FamHuan.png" />
 					<div class="login">
 						<div>
-							<a href="../main.jsp">메인화면</a> | 
-							<a href="regist.jsp">회원가입</a>
+							<a href="/">메인화면</a> | 
+							<a href="/views/manage/regist.jsp">회원가입</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="topMenu">
 				<ul class="top_nav">
-					<li><a href="#">메뉴1</a></li>
-					<li><a href="#">메뉴2</a></li>
+					<li><a href="/">메인화면</a></li>
+					<li><a href="/views/board/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>
@@ -70,8 +70,8 @@
 							</table>
 						</form>
 						<div class = "btn">
-							<a href = "../main.jsp" class = "btn_g">로그인</a>
-							<a href = "memberList.jsp" class = "btn_g">회원가입</a>
+							<a href = "/" class = "btn_g">로그인</a>
+							<a href = "/views/manage/regist.jsp" class = "btn_g">회원가입</a>
 						</div>
 						<div class="paging">
 						</div>

@@ -8,7 +8,7 @@
   <meta name="Keywords" content="">
   <meta name="Description" content="">
   <title>Document</title>
-  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
  <script>
 	function onValidation(){
 		var regForm = document.regForm;
@@ -35,13 +35,13 @@
   			alert("비밀번호가 다릅니다.");
   			return;
   		}
-		regForm.action = "insert.jsp";
+		regForm.action = "/manage/insert.jsp";
 		regForm.submit();
 	}
 	
 	function next(){
 		var regForm = document.regForm;
-		regForm.action = "login.jsp";
+		regForm.action = "/manage/login.jsp";
 		regForm.submit();
 	}
  </script>
@@ -51,19 +51,19 @@
 		<div class="header">
 			<div>
 				<div class="huanImg">
-					<img src="../img/FamHuan.png" />
+					<img src="/img/FamHuan.png" />
 					<div class="login">
 						<div>
-							<a href="../main.jsp">메인화면</a> | 
-							<a href="../login.jsp">로그인</a>
+							<a href="/">메인화면</a> | 
+							<a href="/views/manage/login.jsp">로그인</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="topMenu">
 				<ul class="top_nav">
-					<li><a href="memberList.jsp">회원관리</a></li>
-					<li><a href="#">메뉴2</a></li>
+					<li><a href="/views/manage/memberList.jsp">회원관리</a></li>
+					<li><a href="/views/board/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>
@@ -74,9 +74,9 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="login.jsp">로 그 인</a></li>
-						<li><a href="memberList.jsp">회원목록</a></li>
-						<li><a href="update.jsp">회원정보수정</a></li>
+						<li><a href="/views/manage/login.jsp">로 그 인</a></li>
+						<li><a href="/views/manage/memberList.jsp">회원목록</a></li>
+						<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
 						<li><a href="#">메뉴1-4</a></li>
 					</ul>
 				</div>
@@ -115,7 +115,7 @@
 							</table>
 						</form>
 						<div class="btn">
-							<a href="memberList.jsp" class="btn_g">목록</a>
+							<a href="/views/manage/memberList.jsp" class="btn_g">목록</a>
 							<a href="javascript:onValidation();" class="btn_g">등록</a>
 						</div>
 					</div>
