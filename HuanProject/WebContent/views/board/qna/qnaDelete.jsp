@@ -7,28 +7,22 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "",
-				pwd = "",
+	String id = "",
 				title = "",
-				content = "";
-	
+				content = "",
+				regdate = "";
+				
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
-	request.setCharacterEncoding("UTF-8"); //한글 깨짐 처리
-	
-	title = request.getParameter("title");
-	content = request.getParameter("content");
-	idx = request.getParameter("idx");
+	String idx = request.getParameter("qno");
 	int idx2 = Integer.parseInt(idx);
-	
-	String upquery = "update fh_tb_qna set title='"+title+"', content ='"+content+"' where idx =" +idx2;
+	String delquery = "select * from fh_tb_qna where idx=" + idx2;
 	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(upquery);
+		rs = stmt.executeQuery(delquery);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -38,9 +32,9 @@
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
-	
-	
-	
+
+
+
 	<div id="test" width="500px">
 		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 		<p>
@@ -106,19 +100,60 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
-					
 					<div class="list">
+						<table>
+							<colgroup>
+								<col width="80px" />
+								<col width="*" />
+								<col width="80px" />
+								<col width="200px" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th>번호</th>
+									<th>제목</th>
+									<th>작성자</th>
+									<th>작성일</th>
+								</tr>
+							</thead>		
+<%
+	if(rs != null){
+		while(rs.next()){
+			id = rs.getString("id");
+			title = rs.getString("title");
+			content = rs.getString("content");
+			regdate = rs.getString("regdate");
+		}
+%>
+							<tbody>
+								<tr>
+									<td><%=idx%></td>
+									<td class="tl pl5"><%=title%></td>
+									<td><%=id%></td>
+									<td><%=regdate%></td>
+								</tr>
+								
+								
+								<tr>
+									<td colspan="4"><%=content%></td>
+								</tr>
+							</tbody>
+<%			
+	}//end if
+%>
+						</table>	
 						<div class="ft12">
-						수정하였습니다.
+						삭제하시겠습니까?
 						</div>
 						<div>
-							<input type = "button" value = "back to LIST" onclick = "location.href='/root/board/qna.jsp'">
+							<input type = "button" value = "DELETE" onclick = "location.href='/views/board/qna/qnaDeleteSubmit.jsp?qno=<%=idx%>'">
+							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qna.jsp'">
 						</div>
 					</div>
 				</div>
@@ -126,9 +161,9 @@
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
-	
-	
-			
+
+
+
 <%
 	}catch(SQLException e){
 		System.out.println(e);
@@ -146,6 +181,6 @@
 			catch(SQLException e){}
 		}
 	}
-%>    
+%>
 </body>
 </html>

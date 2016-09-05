@@ -7,34 +7,31 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "",
+	String id = "",
 				pwd = "",
 				title = "",
-				content = "",
-				regdate = "";
+				content = "";
 	
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
-	if(request.getParameter("qno") != null){
-		idx = request.getParameter("qno");
-	}else{
-		idx = "0";
-	}
+	request.setCharacterEncoding("UTF-8");
 	
-	String upquery = "select idx,id,pwd,title,content,regdate from fh_tb_qna where idx=" + idx;
-
+	title = request.getParameter("title");
+	content = request.getParameter("content");
+	
+	String crquery = "insert into fh_tb_qna(idx, id, pwd, title, content, regdate) values(qna_seq.nextval, 'chandler', 'pwd','"+title+"', '"+content+"', sysdate)";
+	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(upquery);
+		rs = stmt.executeQuery(crquery);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
+<link rel = "stylesheet" type = "text/css" href="/css/layout.css">
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
@@ -106,66 +103,28 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
-					<div class="list">
-						
-						<form method = "post" name = "qnaupdate" action = "http://localhost:8080/root/board/qnaUpdateSubmit.jsp">
-							<table>
-								<colgroup>
-									<col width="80px" />
-									<col width="*" />
-									<col width="80px" />
-									<col width="200px" />
-								</colgroup>
-								<thead>
-									<tr>
-										<th>수정</th>
-										<th></th>
-									</tr>
-								</thead>		
-<%
-	if(rs != null){
-		while(rs.next()){
-			title = rs.getString("title");
-			content = rs.getString("content");
-		}
-%>
-								<tbody>
-									<tr><td><input type = "hidden" name = "idx" value ="<%=idx%>"></td></tr>
-									<tr>
-										<td>제목</td>
-										<td class="tl pl5"><input type = "text" name = "title" value = "<%=title%>"></td>
-									</tr>
-									<tr>
-										<td>내용</td>
-										<td colspan="4"><input type = "text" name = "content" value = "<%=content%>"></td>
-									</tr>
-								</tbody>
-<%			
-		}//end if
-%>
-							</table>	
-							
-							<div>
-								<input type = "submit" value = "SUBMIT">
-								<input type = "button" value = "CANCEL" onclick = "location.href='/root/board/qnaRead.jsp?qno=<%=idx%>'">
-							</div>
-						</form>
-						
+						<div class="list">
+						<div class="ft12">
+						작성하였습니다.
+						</div>
+						<div>
+							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna/qna.jsp'">
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
-	
-
-
+		
+		
+		
 <%
 	}catch(SQLException e){
 		System.out.println(e);

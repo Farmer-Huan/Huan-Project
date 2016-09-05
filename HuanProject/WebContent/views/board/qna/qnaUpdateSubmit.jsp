@@ -7,18 +7,28 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
+	String idx = "",
+				id = "",
+				pwd = "",
+				title = "",
+				content = "";
 	
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
-	String idx = request.getParameter("qno");
+	request.setCharacterEncoding("UTF-8"); //한글 깨짐 처리
+	
+	title = request.getParameter("title");
+	content = request.getParameter("content");
+	idx = request.getParameter("idx");
 	int idx2 = Integer.parseInt(idx);
-	String delquery = "delete from fh_tb_qna where idx=" + idx2;
+	
+	String upquery = "update fh_tb_qna set title='"+title+"', content ='"+content+"' where idx =" +idx2;
 	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(delquery);
+		rs = stmt.executeQuery(upquery);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -28,9 +38,9 @@
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
-
-
-
+	
+	
+	
 	<div id="test" width="500px">
 		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 		<p>
@@ -96,18 +106,19 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
+					
 					<div class="list">
 						<div class="ft12">
-						삭제하였습니다.
+						수정하였습니다.
 						</div>
 						<div>
-							<input type = "button" value = "back to LIST" onclick = "location.href='/root/board/qna.jsp'">
+							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna/qna.jsp'">
 						</div>
 					</div>
 				</div>
@@ -115,9 +126,9 @@
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
-
-
-
+	
+	
+			
 <%
 	}catch(SQLException e){
 		System.out.println(e);
@@ -135,6 +146,6 @@
 			catch(SQLException e){}
 		}
 	}
-%>
+%>    
 </body>
 </html>

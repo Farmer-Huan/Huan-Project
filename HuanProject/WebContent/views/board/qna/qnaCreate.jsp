@@ -1,45 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.*" %>
-<%@ page import = "com.farmer.huan.DBConfig" %>
-<%
-	Class.forName("oracle.jdbc.driver.OracleDriver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String id = "",
-				pwd = "",
-				title = "",
-				content = "";
-	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
-	
-	request.setCharacterEncoding("UTF-8");
-	
-	title = request.getParameter("title");
-	content = request.getParameter("content");
-	
-	String crquery = "insert into fh_tb_qna(idx, id, pwd, title, content, regdate) values(qna_seq.nextval, 'chandler', 'pwd','"+title+"', '"+content+"', sysdate)";
-	
-	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(crquery);
-%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-/W3C/DTD HTML 4.01 Transitional/EN" "http:/www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel = "stylesheet" type = "text/css" href="/css/layout.css">
+<link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
 
-
-
+	
+	
 	<div id="test" width="500px">
-		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
+		<!--  Path : /getServletContext().getRealPath("/")  </h3> -->
 		<p>
 			<%
 				Object session_id = session.getAttribute("session_id");
@@ -103,45 +76,54 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="http:/localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
+						<li><a href="http:/localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
-						<div class="list">
-						<div class="ft12">
-						작성하였습니다.
-						</div>
-						<div>
-							<input type = "button" value = "back to LIST" onclick = "location.href='/root/board/qna.jsp'">
-						</div>
+					<div class="list">
+						
+						<form method = "post" name = "qnacreate" action ="/views/board/qna/qnaCreateSubmit.jsp">
+							<table>
+								<colgroup>
+									<col width="80px" />
+									<col width="*" />
+									<col width="80px" />
+									<col width="80px" />
+								</colgroup>
+								<thead>
+									<tr>
+										<th>글쓰기</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>제목</td>
+										<td><input type = "text" name = "title"></td>
+									</tr>
+									<tr>
+										<td>내용</td>
+										<td><input type = "text" name = "content"></td>
+									</tr>
+
+								</tbody>
+							</table>
+							<div>
+								<input type = "submit" value = "SUBMIT">
+								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qna/qna.jsp'">
+							</div>
+						</form>
+						
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
-		
-		
-		
-<%
-	}catch(SQLException e){
-		System.out.println(e);
-	}catch(Exception e){
-		System.out.println(e);
-	}finally{
-		if(rs != null){
-			try{rs.close();}
-			catch(SQLException e){}
-		}if(stmt != null){
-			try{stmt.close();}
-			catch(SQLException e){}
-		}if(conn != null){
-			try{conn.close();}
-			catch(SQLException e){}
-		}
-	}
-%>
+
+
+
 </body>
 </html>

@@ -7,23 +7,29 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String id = "",
+	String idx = "",
+				id = "",
+				pwd = "",
 				title = "",
 				content = "",
 				regdate = "";
-				
+	
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
-	String idx = request.getParameter("qno");
-	int idx2 = Integer.parseInt(idx);
-	String delquery = "select * from fh_tb_qna where idx=" + idx2;
+	if(request.getParameter("qno") != null){
+		idx = request.getParameter("qno");
+	}else{
+		idx = "0";
+	}
 	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(delquery);
+		String idxQuery = "select * from fh_tb_qna where idx="+idx;
+		rs = stmt.executeQuery(idxQuery);
 %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -100,8 +106,8 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
@@ -125,8 +131,9 @@
 <%
 	if(rs != null){
 		while(rs.next()){
-			id = rs.getString("id");
+			idx = rs.getString("idx");
 			title = rs.getString("title");
+			id = rs.getString("id");
 			content = rs.getString("content");
 			regdate = rs.getString("regdate");
 		}
@@ -148,12 +155,11 @@
 	}//end if
 %>
 						</table>	
-						<div class="ft12">
-						삭제하시겠습니까?
-						</div>
+						
 						<div>
-							<input type = "button" value = "DELETE" onclick = "location.href='/root/board/qnaDeleteSubmit.jsp?qno=<%=idx%>'">
-							<input type = "button" value = "BACK" onclick = "location.href='/root/board/qna.jsp'">
+							<input type = "button" value = "UPDATE" onclick = "location.href='/views/board/qna/qnaUpdate.jsp?qno=<%=idx%>'">
+							<input type = "button" value = "DELETE" onclick = "location.href='/views/board/qna/qnaDelete.jsp?qno=<%=idx%>'">
+							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qna.jsp'">
 						</div>
 					</div>
 				</div>
@@ -161,7 +167,7 @@
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
-
+	
 
 
 <%
@@ -181,6 +187,6 @@
 			catch(SQLException e){}
 		}
 	}
-%>
+%>	
 </body>
 </html>

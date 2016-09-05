@@ -7,33 +7,40 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String rownum = "",
-				idx = "",
+	String idx = "",
 				id = "",
+				pwd = "",
 				title = "",
+				content = "",
 				regdate = "";
 	
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
-	int count = 0;
+	if(request.getParameter("qno") != null){
+		idx = request.getParameter("qno");
+	}else{
+		idx = "0";
+	}
 	
+	String upquery = "select * from fh_tb_qna where idx=" + idx;
+
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery("select rownum,idx,id,title,regdate from fh_tb_qna order by idx desc");	
+		rs = stmt.executeQuery(upquery);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
 
 
-	
+
 	<div id="test" width="500px">
 		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 		<p>
@@ -99,67 +106,57 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/root/board/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/root/board/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
 					<div class="list">
-						<table>
-							<colgroup>
-								<col width="80px" />
-								<col width="*" />
-								<col width="80px" />
-								<col width="80px" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th>번호</th>
-									<th>제목</th>
-									<th>작성자</th>
-									<th>작성일</th>
-								</tr>
-							</thead>
-							<tbody>
+						
+						<form method = "post" name = "qnaupdate" action = "http://localhost:8080/views/board/qna/qnaUpdateSubmit.jsp">
+							<table>
+								<colgroup>
+									<col width="80px" />
+									<col width="*" />
+									<col width="80px" />
+									<col width="200px" />
+								</colgroup>
+								<thead>
+									<tr>
+										<th>수정</th>
+										<th></th>
+									</tr>
+								</thead>		
 <%
 	if(rs != null){
 		while(rs.next()){
-			idx = rs.getString("idx");
 			title = rs.getString("title");
-			id = rs.getString("id");
-			regdate = rs.getString("regdate").substring(0,10);
+			content = rs.getString("content");
+		}
 %>
-								<tr>
-									<td><%=idx%></td>
-									<td class="tl pl5"><a href="http://localhost:8080/root/board/qnaRead.jsp?qno=<%=idx%>"><%=title%></a></td>
-									<td><%=id%></td>
-									<td><%=regdate%></td>
-								</tr>
-
-<%			count++;
-			if(count >= 10){
-				count = 0;
-				break;
-			}
-			
-		}//end while
-	}//end if
+								<tbody>
+									<tr><td><input type = "hidden" name = "idx" value ="<%=idx%>"></td></tr>
+									<tr>
+										<td>제목</td>
+										<td class="tl pl5"><input type = "text" name = "title" value = "<%=title%>"></td>
+									</tr>
+									<tr>
+										<td>내용</td>
+										<td colspan="4"><input type = "text" name = "content" value = "<%=content%>"></td>
+									</tr>
+								</tbody>
+<%			
+		}//end if
 %>
-							</tbody>
-						</table>
-						<div>
-							<input type = "button" value = "CREATE" onclick = "location.href='/root/board/qnaCreate.jsp'">
-						</div>
-						<div class="paging">
-							<a href="#" class="prev"><img src="/img/btn_prev.gif" /></a>
-							<strong><span>1</span></strong>
-							<a href="http://localhost:8080/root/board/qna.jsp?pagenum=2"><span>2</span></a>
-							<a href="http://localhost:8080/root/board/qna.jsp?pagenum=3"><span>3</span></a>
-							<a href="http://localhost:8080/root/board/qna.jsp?pagenum=4"><span>4</span></a>
-							<a href="http://localhost:8080/root/board/qna.jsp?pagenum=5"><span>5</span></a>
-							<a href="#" class="next"><img src="/img/btn_next.gif" /></a>
-						</div>
+							</table>	
+							
+							<div>
+								<input type = "submit" value = "SUBMIT">
+								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qna/qnaRead.jsp?qno=<%=idx%>'">
+							</div>
+						</form>
+						
 					</div>
 				</div>
 			</div>
@@ -167,11 +164,11 @@
 		<div class="footer"><span>copy right</span></div>
 	</div>
 	
-	
+
 
 <%
 	}catch(SQLException e){
-		System.out.println(e);		
+		System.out.println(e);
 	}catch(Exception e){
 		System.out.println(e);
 	}finally{
