@@ -121,7 +121,7 @@
 
 		if(<%= i %> > 0){
 			alert("회원가입 되었습니다.");
-			location.href = "/manage/login.jsp";
+			location.href = "/views/manage/login.jsp";
 		} else {
 			alert("회원가입 실패");
 			history.go(-1);

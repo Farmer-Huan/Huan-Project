@@ -27,7 +27,7 @@
 			<div class="topMenu">
 				<ul class="top_nav">
 					<li><a href="/views/manage/memberList.jsp">회원관리</a></li>
-					<li><a href="/views/board/notice.jsp">게시판</a></li>
+					<li><a href="/views/board/board/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>
@@ -37,11 +37,11 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="/views/board/writeList.jsp">전체 글 보기</a></li>
-						<li><a href="/views/board/notice.jsp">공지사항</a></li>
-						<li><a href="/views/board/free.jsp">자유게시판</a></li>
-						<li><a href="/views/board/qna.jsp">묻고답하기</a></li>
-						<li><a href="/views/board/guestbook.jsp">방명록</a></li>
+						<li><a href="/views/board/notice/writeList.jsp">전체 글 보기</a></li>
+						<li><a href="/views/board/notice/notice.jsp">공지사항</a></li>
+						<li><a href="/views/board/free/free.jsp">자유게시판</a></li>
+						<li><a href="/views/board/qna/qna.jsp">묻고답하기</a></li>
+						<li><a href="/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">

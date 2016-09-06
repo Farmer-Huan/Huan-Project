@@ -40,5 +40,5 @@
 			out.println(se.getMessage());
 		}
 	}
-	response.sendRedirect("memberUpdate.jsp");
+	response.sendRedirect("/views/manage/memberUpdate.jsp");
 %>

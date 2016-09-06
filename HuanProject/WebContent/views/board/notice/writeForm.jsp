@@ -48,7 +48,7 @@
 			<div class="topMenu">
 				<ul class="top_nav">
 					<li><a href="/views/manage/memberList.jsp">회원관리</a></li>
-					<li><a href="/views/notice/notice.jsp">게시판</a></li>
+					<li><a href="/views/board/notice/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>
@@ -58,17 +58,17 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="/views/notice/writeList.jsp">전체 글 보기</a></li>
-						<li><a href="/views/notice/notice.jsp">공지사항</a></li>
-						<li><a href="/views/free/free.jsp">자유게시판</a></li>
-						<li><a href="/views/qna/qna.jsp">묻고답하기</a></li>
-						<li><a href="/views/guestbook/guestbook.jsp">방명록</a></li>
+						<li><a href="/views/board/notice/writeList.jsp">전체 글 보기</a></li>
+						<li><a href="/views/board/notice/notice.jsp">공지사항</a></li>
+						<li><a href="/views/board/free/free.jsp">자유게시판</a></li>
+						<li><a href="/views/board/qna/qna.jsp">묻고답하기</a></li>
+						<li><a href="/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; 공지사항 </div>
 					<div class="list">
-						<form method = "post" name = "writeForm" action = "/views/notice/writeFormProc.jsp">
+						<form method = "post" name = "writeForm" action = "/views/board/notice/writeFormProc.jsp">
 							<table>
 								<colgroup>
 									<col width="80px" />
@@ -123,7 +123,7 @@
 						<div class = "btn">
 							<a href = "javascript:writeSave();" class = "btn_g">글 등록</a>
 							<a href = "#" class = "btn_g">다시작성</a>
-							<a href = "/views/notice/writeList.jsp" class = "btn_g">글 목록</a>
+							<a href = "/views/board/notice/writeList.jsp" class = "btn_g">글 목록</a>
 						</div>
 					</div>
 				</div>

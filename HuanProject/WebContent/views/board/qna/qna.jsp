@@ -62,7 +62,7 @@
 				
 				if(sid == "" || sid == null) {
 			%>
-			<form method="post" action="/views/login.jsp">
+			<form method="post" action="/views/manage/login.jsp">
 				<textblock>아이디:</textblock>
 			 	<input id="login_id" name="id" type="text" value="" /> <br/>
 			 	<textblock>비밀번호:</textblock>

@@ -28,7 +28,7 @@
 			<div class="topMenu">
 				<ul class="top_nav">
 					<li><a href="/">메인화면</a></li>
-					<li><a href="/views/notice/notice.jsp">게시판</a></li>
+					<li><a href="/views/board/notice/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>

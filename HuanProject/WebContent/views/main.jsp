@@ -50,7 +50,7 @@
 <div id="test" width="500px">
 	<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 	<p>
-		<form method="post" action="/views/login.jsp">
+		<form method="post" action="/views/manage/login.jsp">
 			<textblock>아이디:</textblock>
 		 	<input id="login_id" name="id" type="text" value="" /> <br/>
 		 	<textblock>비밀번호:</textblock>
@@ -68,9 +68,9 @@
 		%>
 		</p>
  	<p></p>
- 	<input type="button" value="regist.jsp" onclick="location.href='/views/regist.jsp'"/>
- 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/memberlist.jsp'"/>
- 	<input type="button" value="insert.jsp" onclick="location.href='/views/insert.jsp'"/>
+ 	<input type="button" value="regist.jsp" onclick="location.href='/views/manage/regist.jsp'"/>
+ 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/manage/memberlist.jsp'"/>
+ 	<input type="button" value="insert.jsp" onclick="location.href='/views/manage/insert.jsp'"/>
  	<p></p>
  	<table>
 	<%

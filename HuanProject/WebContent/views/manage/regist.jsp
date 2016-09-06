@@ -35,13 +35,13 @@
   			alert("비밀번호가 다릅니다.");
   			return;
   		}
-		regForm.action = "/manage/insert.jsp";
+		regForm.action = "/views/manage/insert.jsp";
 		regForm.submit();
 	}
 	
 	function next(){
 		var regForm = document.regForm;
-		regForm.action = "/manage/login.jsp";
+		regForm.action = "/views/manage/login.jsp";
 		regForm.submit();
 	}
  </script>
@@ -63,7 +63,7 @@
 			<div class="topMenu">
 				<ul class="top_nav">
 					<li><a href="/views/manage/memberList.jsp">회원관리</a></li>
-					<li><a href="/views/notice/notice.jsp">게시판</a></li>
+					<li><a href="/views/board/notice/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>

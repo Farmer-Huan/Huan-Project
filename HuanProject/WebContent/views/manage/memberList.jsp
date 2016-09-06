@@ -28,7 +28,7 @@
 				<div class="topMenu">
 					<ul class="top_nav">
 						<li><a href="/">메인화면</a></li>
-						<li><a href="/views/notice/notice.jsp">게시판</a></li>
+						<li><a href="/views/board/notice/notice.jsp">게시판</a></li>
 						<li><a href="#">메뉴3</a></li>
 						<li><a href="#">메뉴4</a></li>
 					</ul>
@@ -84,7 +84,8 @@
 									  	// 결과 값을 출력하기 위한 방법
 									  	stmt = conn.createStatement();
 									
-									  	String sql = "select * from fh_tb_user order by idx desc";
+									  	String sql = "select * from fh_tb_user " +
+									  				"order by idx desc";
 									  	
 									  	rs = stmt.executeQuery(sql);
 								%>	
