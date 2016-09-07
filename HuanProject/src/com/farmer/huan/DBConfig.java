@@ -2,9 +2,9 @@ package com.farmer.huan;
 
 public class DBConfig {
 	
-	public static final String DB_ID = "chandler";
+	public static final String DB_ID = "kslsr";
 	
-	public static final String DB_PW = "test1234";
+	public static final String DB_PW = "1234";
 
 	/*
 	 * jsp에서 import 한 후에 <%@ page import = "com.farmer.huan.DBConfig" %>
