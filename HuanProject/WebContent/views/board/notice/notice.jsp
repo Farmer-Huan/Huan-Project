@@ -27,7 +27,7 @@
 			<div class="topMenu">
 				<ul class="top_nav">
 					<li><a href="/views/manage/memberList.jsp">회원관리</a></li>
-					<li><a href="/views/board/board/notice.jsp">게시판</a></li>
+					<li><a href="/views/board/notice/notice.jsp">게시판</a></li>
 					<li><a href="#">메뉴3</a></li>
 					<li><a href="#">메뉴4</a></li>
 				</ul>
