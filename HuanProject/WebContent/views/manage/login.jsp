@@ -10,6 +10,13 @@
   <meta name="Description" content="">
   <title>Document</title>
   <link rel="stylesheet" href="/css/layout.css" />
+  <script type="text/javascript">
+  	function procLogin(){
+  		var frm = document.logForm;
+  		frm.action = "/views/manage/memberList.jsp";
+  		frm.submit();
+  	}
+  </script>
  </head>
  <body>
 	<div class="wrap">
@@ -47,7 +54,7 @@
 				<div class="content">
 					<div class="contentNav">회원관리 &gt; 로그인</div>
 					<div class="list">
-						<form action = "#" method = "post">
+						<form action = "#" method = "post" name = "logForm">
 							<table>
 								<colgroup>
 									<col width="80px" />
@@ -70,7 +77,7 @@
 							</table>
 						</form>
 						<div class = "btn">
-							<a href = "/" class = "btn_g">로그인</a>
+							<a href = "javascript:procLogin();" class = "btn_g">로그인</a>
 							<a href = "/views/manage/regist.jsp" class = "btn_g">회원가입</a>
 						</div>
 						<div class="paging">
