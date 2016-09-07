@@ -2,36 +2,36 @@
 <!doctype html>
 
 <html lang="ko">
- <head>
-  <meta charset="UTF-8">
-  <meta name="Generator" content="EditPlus®">
-  <meta name="Author" content="">
-  <meta name="Keywords" content="">
-  <meta name="Description" content="">
-  <title>Document</title>
-  <link rel="stylesheet" href="/css/layout.css" />
- </head>
- <body>
- <script type="text/javascript">
- 	function writeSave(){
- 		if(document.writeForm.writer.value == ""){
- 			alert("작성자를 입력하세요.");
- 			document.writeForm.writer.focus();
- 			return false;
- 		}
- 		if (document.writeForm.subject.value == ""){
- 			alert("제목을 입력하세요.");
- 			document.writeForm.subject.focus();
- 			return false;
- 		}
- 		if (document.writeForm.pwd.value == ""){
- 			alert("비밀번호를 입력하세요.");
- 			document.writeForm.pwd.focus();
- 			return false;
- 		}
- 		writeForm.submit();
- 	}
- </script>
+<head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>Document</title>
+	<link rel="stylesheet" href="/css/layout.css" />
+</head>
+<body>
+	<script type="text/javascript">
+		function writeSave(){
+			if(document.writeForm.writer.value == ""){
+				alert("작성자를 입력하세요.");
+				document.writeForm.writer.focus();
+				return false;
+			}
+			if (document.writeForm.subject.value == ""){
+				alert("제목을 입력하세요.");
+				document.writeForm.subject.focus();
+				return false;
+			}
+			if (document.writeForm.pwd.value == ""){
+				alert("비밀번호를 입력하세요.");
+				document.writeForm.pwd.focus();
+				return false;
+			}
+			writeForm.submit();
+		}
+	</script>
 	<div class="wrap">
 		<div class="header">
 			<div>

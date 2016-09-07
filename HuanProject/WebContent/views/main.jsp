@@ -1,20 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import = "com.farmer.huan.DBConfig" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page import = "java.sql.*" %>
+<html lang = "ko">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="Generator" content="EditPlus®">
-<meta name="Author" content="">
-<meta name="Keywords" content="">
-<meta name="Description" content="">
-<!-- <link rel="stylesheet" href="/WEB-INF/css/layout.css" /> -->
-<link rel="stylesheet" type="text/css" href="/css/layout.css" />
-<!-- <link rel="text/css" href="<c:url value='/WEB-INF/css/layout.css'/>" /> -->
-<script type="text/javascript" src="/js/main.js"></script>
-
-<title>HuanProject</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<!-- <link rel="stylesheet" href="/WEB-INF/css/layout.css" /> -->
+	<link rel="stylesheet" type="text/css" href="/css/layout.css" />
+	<!-- <link rel="text/css" href="<c:url value='/WEB-INF/css/layout.css'/>" /> -->
+	<script type="text/javascript" src="/js/main.js"></script>
+	
+	<title>HuanProject</title>
 </head>
 <body>
 <%
@@ -27,14 +26,14 @@
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 
 		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String id = DBConfig.DB_ID;
-		String pw = DBConfig.DB_PW;
+		String db_id = DBConfig.DB_ID;
+		String db_pwd = DBConfig.DB_PW;
 
-		conn = DriverManager.getConnection(url, id, pw);
+		conn = DriverManager.getConnection(url, db_id, db_pwd);
 		stmt = conn.createStatement();
-		String sql = "select * from FH_TB_USER";
+		String sql = "select * " + 
+					"from FH_TB_USER";
 		rs = stmt.executeQuery(sql);
-		
 	} catch (ClassNotFoundException e) {
 		out.println(e.toString());
 	} catch (SQLException e) {
@@ -65,7 +64,7 @@
 				out.println("session_id: " + session_id);
 			}
 		%>
-		</p>
+	</p>
  	<p></p>
  	<input type="button" value="regist.jsp" onclick="location.href='/views/manage/regist.jsp'"/>
  	<input type="button" value="memberlist.jsp" onclick="location.href='/views/manage/memberlist.jsp'"/>
@@ -108,8 +107,8 @@
 				</div>
 				<div class="topMenu">
 					<ul class="top_nav">
-						<li><a href="#">메뉴1</a></li>
-						<li><a href="#">메뉴2</a></li>
+						<li><a href="/views/manage/memberList.jsp">회원가입</a></li>
+						<li><a href="/views/board/notice/notice.jsp">공지사항</a></li>
 						<li><a href="#">메뉴3</a></li>
 						<li><a href="#">메뉴4</a></li>
 					</ul>

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%@ page import = "java.sql.*" %>
 <!doctype html>
 <html lang="ko">
@@ -24,8 +25,8 @@
 
 		String driver = "oracle.jdbc.OracleDriver";
 		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String db_id = "kslsr";
-		String db_pwd = "1234";
+		String db_id = DBConfig.DB_ID;
+		String db_pwd = DBConfig.DB_PW;
 		int n = 0;
 
 		try {

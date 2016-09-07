@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%@ page import = "java.sql.*" %>
 <!doctype html>
 <html lang="ko">
@@ -73,8 +74,8 @@
 								  	
 								  	String driver = "oracle.jdbc.driver.OracleDriver";
 								  	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-								  	String db_id = "kslsr";
-								  	String db_pwd = "1234";
+								  	String db_id = DBConfig.DB_ID;
+									String db_pwd = DBConfig.DB_PW;
 								  	
 								  	try {
 								  		
@@ -84,7 +85,8 @@
 									  	// 결과 값을 출력하기 위한 방법
 									  	stmt = conn.createStatement();
 									
-									  	String sql = "select * from fh_tb_user " +
+									  	String sql = "select * " +
+									  				"from fh_tb_user " +
 									  				"order by idx desc";
 									  	
 									  	rs = stmt.executeQuery(sql);
