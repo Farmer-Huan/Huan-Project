@@ -7,33 +7,48 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String id = "",
+	String idx = "",
+				id = "",
 				title = "",
 				content = "",
 				regdate = "";
-				
+	
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
-	String idx = request.getParameter("qno");
-	int idx2 = Integer.parseInt(idx);
-	String qdquery = "select * from fh_tb_qna where idx=" + idx2;
+	if(request.getParameter("gno") != null){
+		idx = request.getParameter("gno");
+	}else{
+		idx = "0";
+	}
+	
+	int gpn = 1;
+	if(request.getParameter("rno") != null){
+		gpn = Integer.parseInt(request.getParameter("rno"));
+		if(gpn%10 != 0){
+			gpn = gpn/10 +1;
+		}else{
+			gpn = gpn/10;
+		}
+	}
+	
+	String grquery = "select * from fh_tb_guestbook where idx = " + idx;
 	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(qdquery);
+		rs = stmt.executeQuery(grquery);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
-<title>Project BARISTA - QnA</title>
+<title>Project BARISTA - Guestbook</title>
 </head>
 <body>
 
-
+	
 	<div id="test" width="500px">
 		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 		<p>
@@ -104,7 +119,7 @@
 					</ul>
 				</div>
 				<div class="content">
-					<div class="contentNav">게시판 &gt; QnA</div>
+					<div class="contentNav">게시판 &gt; Guestbook</div>
 					<div class="list">
 						<table>
 							<colgroup>
@@ -120,65 +135,50 @@
 									<th>작성자</th>
 									<th>작성일</th>
 								</tr>
-							</thead>		
-							<%
-								if(rs != null){
-									while(rs.next()){
-										id = rs.getString("id");
-										title = rs.getString("title");
-										content = rs.getString("content");
-										regdate = rs.getString("regdate");
-									}
-							%>
+							</thead>
 							<tbody>
+								<%
+									if(rs != null){
+										while(rs.next()){
+											idx = rs.getString("idx");
+											title = rs.getString("title");
+											id = rs.getString("id");
+											content = rs.getString("content");
+											regdate = rs.getString("regdate");
+										}
+								%>
 								<tr>
 									<td><%=idx%></td>
 									<td class="tl pl5"><%=title%></td>
 									<td><%=id%></td>
 									<td><%=regdate%></td>
 								</tr>
-								
 								<tr>
-									<td colspan="4"><textarea cols = "100" rows = "10"><%=content%></textarea></td>
+									<td colspan="4"><textarea cols="100" rows="10" readonly><%=content%></textarea></td>
 								</tr>
-							</tbody>
-							<%			
-								}//end if
-							%>
-						</table>	
-						<%
-						if(id.equals(sid)){
-						%>
-						<div class="ft12">
-						삭제하시겠습니까?
-						</div>
-						<div>
-							<form method = "post" action ="/views/board/qna/qnaDeleteSubmit.jsp?qno=<%=idx%>">
-							<input type = "hidden" name = "id" value = "<%=id %>">
-							<input type = "submit" value = "DELETE">
+								</tbody>
+								<%		
+									}//end if
+								%>
+						</table>
+						
+						<div class = "ft12">
+							<form method = "post" name = "gbread" action = "/views/board/guestbook/gbUpdate.jsp?gno=<%=idx%>">
+								수정하려면 비밀번호를 입력하세요.<br>
+								<input type = "password" name ="readpwd" value = ""> 
+								<input type = "submit" value = "UPDATE">
 							</form>
-							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qnaRead.jsp?qno=<%=idx%>'">
+							<input type = "button" value = "DELETE" onclick = "location.href='/views/board/guestbook/gbDelete.jsp?gno=<%=idx%>'">
+							<input type = "button" value = "BACK" onclick = "location.href='/views/board/guestbook/guestbook.jsp?gpn=<%=gpn%>'">
 						</div>
-						<%
-						}else{
-						%>
-						<div class="ft12">
-						작성한 본인 이외엔 삭제가 불가능합니다.
-						</div>
-						<div>
-							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qnaRead.jsp?qno=<%=idx%>'">
-						</div>
-						<%
-						}
-						%>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
-
-
+	
+	
 	<%
 		}catch(SQLException e){
 			System.out.println(e);

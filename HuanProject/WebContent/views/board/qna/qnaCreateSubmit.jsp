@@ -17,15 +17,17 @@
 	
 	request.setCharacterEncoding("UTF-8");
 	
+	id = request.getParameter("id");
+	pwd = request.getParameter("pwd");
 	title = request.getParameter("title");
 	content = request.getParameter("content");
 	
-	String crquery = "insert into fh_tb_qna(idx, id, pwd, title, content, regdate) values(qna_seq.nextval, 'chandler', 'pwd','"+title+"', '"+content+"', sysdate)";
+	String qcquery = "insert into fh_tb_qna(idx, id, pwd, title, content, regdate) values(qna_seq.nextval, '"+id+"', '"+pwd+"','"+title+"', '"+content+"', sysdate)";
 	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(crquery);
+		rs = stmt.executeQuery(qcquery);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -35,7 +37,6 @@
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
-
 
 
 	<div id="test" width="500px">
@@ -104,7 +105,7 @@
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
 						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
@@ -124,24 +125,23 @@
 	</div>
 		
 		
-		
-<%
-	}catch(SQLException e){
-		System.out.println(e);
-	}catch(Exception e){
-		System.out.println(e);
-	}finally{
-		if(rs != null){
-			try{rs.close();}
-			catch(SQLException e){}
-		}if(stmt != null){
-			try{stmt.close();}
-			catch(SQLException e){}
-		}if(conn != null){
-			try{conn.close();}
-			catch(SQLException e){}
+	<%
+		}catch(SQLException e){
+			System.out.println(e);
+		}catch(Exception e){
+			System.out.println(e);
+		}finally{
+			if(rs != null){
+				try{rs.close();}
+				catch(SQLException e){}
+			}if(stmt != null){
+				try{stmt.close();}
+				catch(SQLException e){}
+			}if(conn != null){
+				try{conn.close();}
+				catch(SQLException e){}
+			}
 		}
-	}
-%>
+	%>
 </body>
 </html>

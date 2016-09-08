@@ -7,29 +7,31 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String id = "",
+	String idx = "",
+				id = "",
+				pwd = "",
 				title = "",
 				content = "",
 				regdate = "";
-				
+	
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
-	String idx = request.getParameter("qno");
+	idx = request.getParameter("gno");
 	int idx2 = Integer.parseInt(idx);
-	String qdquery = "select * from fh_tb_qna where idx=" + idx2;
+	String gdquery = "select * from fh_tb_guestbook where idx=" + idx2;
 	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(qdquery);
+		rs = stmt.executeQuery(gdquery);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
-<title>Project BARISTA - QnA</title>
+<title>Project BARISTA - Guestbook</title>
 </head>
 <body>
 
@@ -104,7 +106,7 @@
 					</ul>
 				</div>
 				<div class="content">
-					<div class="contentNav">게시판 &gt; QnA</div>
+					<div class="contentNav">게시판 &gt; Guestbook</div>
 					<div class="list">
 						<table>
 							<colgroup>
@@ -124,7 +126,9 @@
 							<%
 								if(rs != null){
 									while(rs.next()){
+										idx = rs.getString("idx");
 										id = rs.getString("id");
+										pwd = rs.getString("pwd");
 										title = rs.getString("title");
 										content = rs.getString("content");
 										regdate = rs.getString("regdate");
@@ -137,40 +141,26 @@
 									<td><%=id%></td>
 									<td><%=regdate%></td>
 								</tr>
-								
 								<tr>
-									<td colspan="4"><textarea cols = "100" rows = "10"><%=content%></textarea></td>
+									<td colspan="4"><%=content%></td>
 								</tr>
 							</tbody>
 							<%			
 								}//end if
 							%>
 						</table>	
-						<%
-						if(id.equals(sid)){
-						%>
 						<div class="ft12">
-						삭제하시겠습니까?
+						삭제하시려면 비밀번호를 입력하고 DELETE 버튼을 누르세요.
 						</div>
 						<div>
-							<form method = "post" action ="/views/board/qna/qnaDeleteSubmit.jsp?qno=<%=idx%>">
-							<input type = "hidden" name = "id" value = "<%=id %>">
+							<form method = "post" name = "gbdelete" action ="/views/board/guestbook/gbDeleteSubmit.jsp?gno=<%=idx%>">
+							<input type = "hidden" name = "idx" value = "<%=idx%>">
+							<input type = "hidden" name = "pwd" value = "<%=pwd%>">
+							<input type = "password" name = "gdpwd">
 							<input type = "submit" value = "DELETE">
 							</form>
-							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qnaRead.jsp?qno=<%=idx%>'">
+							<input type = "button" value = "BACK" onclick = "location.href='/views/board/guestbook/gbRead.jsp?gno=<%=idx%>'">
 						</div>
-						<%
-						}else{
-						%>
-						<div class="ft12">
-						작성한 본인 이외엔 삭제가 불가능합니다.
-						</div>
-						<div>
-							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qnaRead.jsp?qno=<%=idx%>'">
-						</div>
-						<%
-						}
-						%>
 					</div>
 				</div>
 			</div>

@@ -107,14 +107,24 @@
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
 						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
 					<div class="list">
-						
+
+						<%
+							if(rs != null){
+								while(rs.next()){
+									id = rs.getString("id");
+									title = rs.getString("title");
+									content = rs.getString("content");
+								}
+								if(id.equals(sid)){
+						%>						
 						<form method = "post" name = "qnaupdate" action = "http://localhost:8080/views/board/qna/qnaUpdateSubmit.jsp">
+
 							<table>
 								<colgroup>
 									<col width="80px" />
@@ -128,34 +138,37 @@
 										<th></th>
 									</tr>
 								</thead>		
-<%
-	if(rs != null){
-		while(rs.next()){
-			title = rs.getString("title");
-			content = rs.getString("content");
-		}
-%>
+
+								<input type = "hidden" name = "id" value = "<%= id %>">
+								<input type = "hidden" name = "idx" value ="<%=idx%>">
 								<tbody>
-									<tr><td><input type = "hidden" name = "idx" value ="<%=idx%>"></td></tr>
 									<tr>
 										<td>제목</td>
 										<td class="tl pl5"><input type = "text" name = "title" value = "<%=title%>"></td>
 									</tr>
 									<tr>
 										<td>내용</td>
-										<td colspan="4"><input type = "text" name = "content" value = "<%=content%>"></td>
+										<td colspan="4"><textarea name = "content" cols = "100" rows = "10"><%=content%></textarea></td>
 									</tr>
 								</tbody>
-<%			
-		}//end if
-%>
-							</table>	
-							
+
+							</table>
 							<div>
 								<input type = "submit" value = "SUBMIT">
 								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qna/qnaRead.jsp?qno=<%=idx%>'">
 							</div>
 						</form>
+						<%			
+								}else{
+						%>
+							<div class="ft12"> 본인만 수정 가능합니다.</div>
+							<div>
+								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qna/qnaRead.jsp?qno=<%=idx%>'">
+							</div>
+						<%
+								}
+							}//end if
+						%>
 						
 					</div>
 				</div>
@@ -166,23 +179,23 @@
 	
 
 
-<%
-	}catch(SQLException e){
-		System.out.println(e);
-	}catch(Exception e){
-		System.out.println(e);
-	}finally{
-		if(rs != null){
-			try{rs.close();}
-			catch(SQLException e){}
-		}if(stmt != null){
-			try{stmt.close();}
-			catch(SQLException e){}
-		}if(conn != null){
-			try{conn.close();}
-			catch(SQLException e){}
+	<%
+		}catch(SQLException e){
+			System.out.println(e);
+		}catch(Exception e){
+			System.out.println(e);
+		}finally{
+			if(rs != null){
+				try{rs.close();}
+				catch(SQLException e){}
+			}if(stmt != null){
+				try{stmt.close();}
+				catch(SQLException e){}
+			}if(conn != null){
+				try{conn.close();}
+				catch(SQLException e){}
+			}
 		}
-	}
-%>
+	%>
 </body>
 </html>

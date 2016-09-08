@@ -1,17 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-/W3C/DTD HTML 4.01 Transitional/EN" "http:/www.w3.org/TR/html4/loose.dtd">
+<%@ page import = "java.sql.*" %>
+<%@ page import = "com.farmer.huan.DBConfig" %>
+<%
+	Class.forName("oracle.jdbc.driver.OracleDriver");
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+	String idx = "",
+				pwd = "";
+	
+	String dbID = DBConfig.DB_ID;
+	String dbPW = DBConfig.DB_PW;
+	
+	idx = request.getParameter("idx");
+	pwd = request.getParameter("pwd");
+	
+	String gdpwd = "";
+	
+	if(request.getParameter("gdpwd") != null){
+		gdpwd = request.getParameter("gdpwd");
+	}else{
+		gdpwd = "0";
+	}
+
+	int idx2 = Integer.parseInt(idx);
+	String gdquery = "delete from fh_tb_guestbook where idx=" + idx2;
+	
+	try{
+		conn = DriverManager.getConnection("jdb:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
+		stmt = conn.createStatement();
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
-<title>Project BARISTA - QnA</title>
+<title>Project BARISTA - Guestbook</title>
 </head>
 <body>
-	
-	
+
+
 	<div id="test" width="500px">
-		<!--  Path : /getServletContext().getRealPath("/")  </h3> -->
+		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 		<p>
 			<%
 				Object session_id = session.getAttribute("session_id");
@@ -75,48 +106,29 @@
 					<ul>
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
-						<li><a href="http:/localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
-						<li><a href="http:/localhost:8080/views/board/guestbook/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
+						<li><a href="http://localhost:8080/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
-					<div class="contentNav">게시판 &gt; QnA</div>
+					<div class="contentNav">게시판 &gt; Guestbook</div>
 					<div class="list">
-						
-						<form method = "post" name = "qnacreate" action ="/views/board/qna/qnaCreateSubmit.jsp">
-							<table>
-								<colgroup>
-									<col width="80px" />
-									<col width="*" />
-									<col width="80px" />
-									<col width="80px" />
-								</colgroup>
-								<thead>
-									<tr>
-										<th>글쓰기</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>제목</td>
-										<td class = "tl pl5"><input type = "text" name = "title"></td>
-									</tr>
-									<tr>
-										<td>내용</td>
-										<td><textarea name = "content" cols = "100" rows = "10" placeholder = "내용을 입력하세요."></textarea></td>
-									</tr>
-
-								</tbody>
-							</table>
-							<div>
-								<input type = "hidden" name = "id" value = "<%= session_id %>">
-								<input type = "hidden" name = "pwd" value = "<%= session_pw %>">
-								<input type = "submit" value = "SUBMIT">
-								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qna/qna.jsp'">
-							</div>
-						</form>
-						
+						<div class="ft12">
+						<%
+						if(gdpwd.equals(pwd)){
+							rs = stmt.executeQuery(gdquery);
+						%>
+							삭제하였습니다.
+							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/guestbook/guestbook.jsp'">
+						<%
+						} else{
+						%>
+							비밀번호가 틀렸습니다.
+							<input type = "button" value = "back to Delete" onclick = "location.href='/views/board/guestbook/gbDelete.jsp?gno=<%=idx%>'">
+						<%
+						}
+						%>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -125,6 +137,23 @@
 	</div>
 
 
-
+	<%
+		}catch(SQLException e){
+			System.out.println(e);
+		}catch(Exception e){
+			System.out.println(e);
+		}finally{
+			if(rs != null){
+				try{rs.close();}
+				catch(SQLException e){}
+			}if(stmt != null){
+				try{stmt.close();}
+				catch(SQLException e){}
+			}if(conn != null){
+				try{conn.close();}
+				catch(SQLException e){}
+			}
+		}
+	%>
 </body>
 </html>

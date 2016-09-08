@@ -18,17 +18,17 @@
 	
 	request.setCharacterEncoding("UTF-8"); //한글 깨짐 처리
 	
+	id = request.getParameter("id");
 	title = request.getParameter("title");
 	content = request.getParameter("content");
 	idx = request.getParameter("idx");
 	int idx2 = Integer.parseInt(idx);
 	
-	String upquery = "update fh_tb_qna set title='"+title+"', content ='"+content+"' where idx =" +idx2;
+	String qupquery = "update fh_tb_qna set title = '"+title+"', content = '"+content+"' where idx = " +idx2;
 	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(upquery);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -38,7 +38,6 @@
 <title>Project BARISTA - QnA</title>
 </head>
 <body>
-	
 	
 	
 	<div id="test" width="500px">
@@ -107,7 +106,7 @@
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
 						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
@@ -115,7 +114,18 @@
 					
 					<div class="list">
 						<div class="ft12">
+						<%
+						if(id.equals(sid)){
+							rs = stmt.executeQuery(qupquery);
+						%>
 						수정하였습니다.
+						<%
+						} else{
+						%>
+						본인만 가능합니다.
+						<%
+						}
+						%>
 						</div>
 						<div>
 							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna/qna.jsp'">
@@ -127,25 +137,24 @@
 		<div class="footer"><span>copy right</span></div>
 	</div>
 	
-	
 			
-<%
-	}catch(SQLException e){
-		System.out.println(e);
-	}catch(Exception e){
-		System.out.println(e);
-	}finally{
-		if(rs != null){
-			try{rs.close();}
-			catch(SQLException e){}
-		}if(stmt != null){
-			try{stmt.close();}
-			catch(SQLException e){}
-		}if(conn != null){
-			try{conn.close();}
-			catch(SQLException e){}
+	<%
+		}catch(SQLException e){
+			System.out.println(e);
+		}catch(Exception e){
+			System.out.println(e);
+		}finally{
+			if(rs != null){
+				try{rs.close();}
+				catch(SQLException e){}
+			}if(stmt != null){
+				try{stmt.close();}
+				catch(SQLException e){}
+			}if(conn != null){
+				try{conn.close();}
+				catch(SQLException e){}
+			}
 		}
-	}
-%>    
+	%>    
 </body>
 </html>
