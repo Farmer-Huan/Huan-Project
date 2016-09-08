@@ -9,7 +9,6 @@
 	ResultSet rs = null;
 	String idx = "",
 				id = "",
-				pwd = "",
 				title = "",
 				content = "",
 				regdate = "";
@@ -22,12 +21,25 @@
 	}else{
 		idx = "0";
 	}
+
+	
+	int qpn = 1;
+	if(request.getParameter("rno") != null){
+		qpn = Integer.parseInt(request.getParameter("rno"));
+	
+		if(qpn%10 != 0){
+			qpn = qpn/10+1;
+		}else{
+			qpn = qpn/1;
+		}
+	}
+	
+	String qrquery = "select * from fh_tb_qna where idx="+idx;
 	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		String idxQuery = "select * from fh_tb_qna where idx="+idx;
-		rs = stmt.executeQuery(idxQuery);
+		rs = stmt.executeQuery(qrquery);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -107,7 +119,7 @@
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
 						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
@@ -128,16 +140,16 @@
 									<th>작성일</th>
 								</tr>
 							</thead>		
-<%
-	if(rs != null){
-		while(rs.next()){
-			idx = rs.getString("idx");
-			title = rs.getString("title");
-			id = rs.getString("id");
-			content = rs.getString("content");
-			regdate = rs.getString("regdate");
-		}
-%>
+							<%
+								if(rs != null){
+									while(rs.next()){
+										idx = rs.getString("idx");
+										title = rs.getString("title");
+										id = rs.getString("id");
+										content = rs.getString("content");
+										regdate = rs.getString("regdate");
+									}
+							%>
 							<tbody>
 								<tr>
 									<td><%=idx%></td>
@@ -146,20 +158,25 @@
 									<td><%=regdate%></td>
 								</tr>
 								
-								
 								<tr>
-									<td colspan="4"><%=content%></td>
+									<td colspan="4"><textarea cols = "100" rows = "10" readonly><%=content%></textarea></td>
 								</tr>
 							</tbody>
-<%			
-	}//end if
-%>
+							<%			
+								}//end if
+							%>
 						</table>	
 						
 						<div>
+							<%
+							if(id.equals(sid)){
+							%>
 							<input type = "button" value = "UPDATE" onclick = "location.href='/views/board/qna/qnaUpdate.jsp?qno=<%=idx%>'">
 							<input type = "button" value = "DELETE" onclick = "location.href='/views/board/qna/qnaDelete.jsp?qno=<%=idx%>'">
-							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qna.jsp'">
+							<%
+							}
+							%>
+							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qna.jsp?qpn=<%=qpn%>'">
 						</div>
 					</div>
 				</div>
@@ -170,23 +187,23 @@
 	
 
 
-<%
-	}catch(SQLException e){
-		System.out.println(e);
-	}catch(Exception e){
-		System.out.println(e);
-	}finally{
-		if(rs != null){
-			try{rs.close();}
-			catch(SQLException e){}
-		}if(stmt != null){
-			try{stmt.close();}
-			catch(SQLException e){}
-		}if(conn != null){
-			try{conn.close();}
-			catch(SQLException e){}
+	<%
+		}catch(SQLException e){
+			System.out.println(e);
+		}catch(Exception e){
+			System.out.println(e);
+		}finally{
+			if(rs != null){
+				try{rs.close();}
+				catch(SQLException e){}
+			}if(stmt != null){
+				try{stmt.close();}
+				catch(SQLException e){}
+			}if(conn != null){
+				try{conn.close();}
+				catch(SQLException e){}
+			}
 		}
-	}
-%>	
+	%>	
 </body>
 </html>

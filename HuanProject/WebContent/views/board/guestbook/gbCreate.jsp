@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-/W3C/DTD HTML 4.01 Transitional/EN" "http:/www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
-<title>Project BARISTA - QnA</title>
+<title>Project BARISTA - Guestbook</title>
 </head>
 <body>
-	
-	
+
+
 	<div id="test" width="500px">
 		<!--  Path : /getServletContext().getRealPath("/")  </h3> -->
 		<p>
@@ -80,10 +80,10 @@
 					</ul>
 				</div>
 				<div class="content">
-					<div class="contentNav">게시판 &gt; QnA</div>
+					<div class="contentNav">게시판 &gt; Guestbook</div>
 					<div class="list">
 						
-						<form method = "post" name = "qnacreate" action ="/views/board/qna/qnaCreateSubmit.jsp">
+						<form method = "post" name = "gbcreate" action ="/views/board/guestbook/gbCreateSubmit.jsp">
 							<table>
 								<colgroup>
 									<col width="80px" />
@@ -99,6 +99,10 @@
 								</thead>
 								<tbody>
 									<tr>
+										<td>이름</td>
+										<td class = "tl pl5"><input type = "text" name = "id"></td>
+									</tr>
+									<tr>
 										<td>제목</td>
 										<td class = "tl pl5"><input type = "text" name = "title"></td>
 									</tr>
@@ -106,14 +110,16 @@
 										<td>내용</td>
 										<td><textarea name = "content" cols = "100" rows = "10" placeholder = "내용을 입력하세요."></textarea></td>
 									</tr>
+									<tr>
+										<td>비밀번호</td>
+										<td class = "tl pl5"><input type = "password" name = "pwd"></td>
+									</tr>
 
 								</tbody>
 							</table>
 							<div>
-								<input type = "hidden" name = "id" value = "<%= session_id %>">
-								<input type = "hidden" name = "pwd" value = "<%= session_pw %>">
 								<input type = "submit" value = "SUBMIT">
-								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qna/qna.jsp'">
+								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/guestbook/guestbook.jsp'">
 							</div>
 						</form>
 						

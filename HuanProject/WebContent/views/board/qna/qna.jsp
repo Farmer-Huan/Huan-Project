@@ -8,7 +8,7 @@
 	Statement stmt = null;
 	ResultSet rs = null;
 	ResultSet rs2 = null;
-	String rownum = "",
+	String rnum = "",
 				idx = "",
 				id = "",
 				title = "",
@@ -17,6 +17,7 @@
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
+	//----------------------------------------------------------------------------------------------------------------------------
 	//페이징처리
 	//qnapage = 10개씩 제목 보여지는 페이지 번호, qpn = QnaPageNumber/get으로 보내고 받는 qnapage 파라메터명
 	//qpcount = QnaPageCount/페이징 시작 번호, qmaxcount = QnaMaxCount/QnA 전체 글 갯수를 받아 페이지 갯수 계산
@@ -32,6 +33,7 @@
 	qpcount = qpcount*10-9;
 	int qmaxcount = 0;
 	int qpend = 10;
+	//----------------------------------------------------------------------------------------------------------------------------
 	
 	String qpquery = "select * from (select rownum as rnum,idx,id,pwd,title,content,regdate from (select * from fh_tb_qna order by idx desc) where rownum <= " + qnapage*10 +") where rnum > " + (qnapage-1)*10;
 	String maxquery = "select max(rownum) from fh_tb_qna";
@@ -117,7 +119,7 @@
 						<li><a href="#">공지사항</a></li>
 						<li><a href="#">게시판</a></li>
 						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/views/board/qna/guestbook.jsp">방명록</a></li>
+						<li><a href="http://localhost:8080/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
@@ -142,17 +144,18 @@
 								<%
 									if(rs != null){
 										while(rs.next()){
+											rnum = rs.getString("rnum");
 											idx = rs.getString("idx");
 											title = rs.getString("title");
 											id = rs.getString("id");
 											regdate = rs.getString("regdate").substring(0,10);
 								%>
-										<tr>
-											<td><%=idx%></td>
-											<td class="tl pl5"><a href="http://localhost:8080/views/board/qna/qnaRead.jsp?qno=<%=idx%>"><%=title%></a></td>
-											<td><%=id%></td>
-											<td><%=regdate%></td>
-										</tr>
+								<tr>
+									<td><%=idx%></td>
+									<td class="tl pl5"><a href="http://localhost:8080/views/board/qna/qnaRead.jsp?qno=<%=idx%>&rno=<%=rnum%>"><%=title%></a></td>
+									<td><%=id%></td>
+									<td><%=regdate%></td>
+								</tr>
 								<%		
 										}//end while
 									}//end if
@@ -185,26 +188,30 @@
 							<%
 								if(qpcount > 1 && qmaxcount >= qnapage){
 							%>
-									<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount-1 %>" class="prev"><img src="/img/btn_prev.gif" /></a>
+							<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount-1 %>" class="prev"><img src="/img/btn_prev.gif" /></a>
 							<%
 								}
 								for(int i = 0; i < qpend; i++){
 									if(qpcount == qnapage){
 							%>
-									<strong><span><%= qnapage %></span></strong>
+							<strong><span><%= qnapage %></span></strong>
 									<%
 										qpcount++;
 										continue;
 									}//end if
 									%>
-									<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount %>"><span><%= qpcount %></span></a>
+							<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount %>"><span><%= qpcount %></span></a>
 							<%
 									qpcount++;
 								}// end for
-								if(qpend >= 10){
+								if(qpend < 10){
+								}else{
+									if(qpend == 10 && qmaxcount-9 == qpcount-10){
+									}else{
 							%>
-								<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount %>" class="next"><img src="/img/btn_next.gif" /></a>
+							<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount %>" class="next"><img src="/img/btn_next.gif" /></a>
 							<%
+									}
 								}//end if
 							%>
 						</div>
@@ -220,26 +227,26 @@
 	
 	
 
-<%
-	}catch(SQLException e){
-		System.out.println(e);		
-	}catch(Exception e){
-		System.out.println(e);
-	}finally{
-		if(rs2 != null){
-			try{rs2.close();}
-			catch(SQLException e){}
-		}if(rs != null){
-			try{rs.close();}
-			catch(SQLException e){}
-		}if(stmt != null){
-			try{stmt.close();}
-			catch(SQLException e){}
-		}if(conn != null){
-			try{conn.close();}
-			catch(SQLException e){}
+	<%
+		}catch(SQLException e){
+			System.out.println(e);		
+		}catch(Exception e){
+			System.out.println(e);
+		}finally{
+			if(rs2 != null){
+				try{rs2.close();}
+				catch(SQLException e){}
+			}if(rs != null){
+				try{rs.close();}
+				catch(SQLException e){}
+			}if(stmt != null){
+				try{stmt.close();}
+				catch(SQLException e){}
+			}if(conn != null){
+				try{conn.close();}
+				catch(SQLException e){}
+			}
 		}
-	}
-%>
+	%>
 </body>
 </html>
