@@ -1,8 +1,8 @@
 DROP TABLE fh_tb_user;
-drop table fh_tb_board_qna;
-drop table fh_tb_board_free;
-drop table fh_tb_board_notice;
-drop table fh_tb_board_guestbook;
+drop table fh_tb_qna;
+drop table fh_tb_free;
+drop table fh_tb_notice;
+drop table fh_tb_guestbook;
 
 drop sequence idx_seq;
 drop sequence qna_seq;
@@ -48,7 +48,7 @@ create table fh_tb_user (
   regdate timestamp not null
 );
 
-create table fh_tb_board_qna (
+create table fh_tb_qna (
   idx number not null,
   id varchar2(20) not null,
   title varchar2(30) not null,
@@ -56,7 +56,7 @@ create table fh_tb_board_qna (
   regdate timestamp not null
 );
 
-create table fh_tb_board_free (
+create table fh_tb_free (
   idx number not null,
   id varchar2(20) not null,
   title varchar2(30) not null,
@@ -64,7 +64,7 @@ create table fh_tb_board_free (
   regdate timestamp not null
 );
 
-create table fh_tb_board_notice (
+create table fh_tb_notice (
   idx number not null,
   id varchar2(20) not null,
   title varchar2(30) not null,
@@ -90,47 +90,47 @@ insert into fh_tb_user(idx, id, pwd, phone, email, regdate) values(idx_seq.nextv
 insert into fh_tb_user(idx, id, pwd, phone, email, regdate) values(idx_seq.nextval, 'ed',       'pwd', '01012341234', 'xcvxcv@gmail.com',       sysdate);
 insert into fh_tb_user(idx, id, pwd, phone, email, regdate) values(idx_seq.nextval, 'wd',       'pwd', '01012341234', 'yuiu@gmail.com',         sysdate);
 
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id1',    'title0',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id2',    'title1',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id3',    'title2',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id4',    'title3',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id5',    'title4',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id6',    'title5',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id7',    'title6',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id8',    'title7',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id9',    'title8',   'content',    sysdate);
-insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id10',   'title9',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id1',    'title0',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id2',    'title1',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id3',    'title2',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id4',    'title3',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id5',    'title4',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id6',    'title5',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id7',    'title6',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id8',    'title7',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id9',    'title8',   'content',    sysdate);
+insert into fh_tb_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id10',   'title9',   'content',    sysdate);
 
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id1',    'title0',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id2',    'title1',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id3',    'title2',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id4',    'title3',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id5',    'title4',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id6',    'title5',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id7',    'title6',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id8',    'title7',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id9',    'title8',   'content',    sysdate);
-insert into fh_tb_board_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id10',   'title9',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id1',    'title0',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id2',    'title1',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id3',    'title2',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id4',    'title3',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id5',    'title4',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id6',    'title5',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id7',    'title6',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id8',    'title7',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id9',    'title8',   'content',    sysdate);
+insert into fh_tb_notice(idx, id, title, content, regdate) values(notice_seq.nextval,     'id10',   'title9',   'content',    sysdate);
 
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id1',    'title0',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id2',    'title1',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id3',    'title2',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id4',    'title3',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id5',    'title4',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id6',    'title5',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id7',    'title6',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id8',    'title7',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id9',    'title8',   'content',    sysdate);
-insert into fh_tb_board_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id10',   'title9',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id1',    'title0',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id2',    'title1',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id3',    'title2',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id4',    'title3',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id5',    'title4',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id6',    'title5',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id7',    'title6',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id8',    'title7',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id9',    'title8',   'content',    sysdate);
+insert into fh_tb_free(idx, id, title, content, regdate) values(free_seq.nextval,     'id10',   'title9',   'content',    sysdate);
 
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id1',    'title0',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id2',    'title1',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id3',    'title2',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id4',    'title3',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id5',    'title4',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id6',    'title5',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id7',    'title6',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id8',    'title7',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id9',    'title8',   'content',    sysdate);
-insert into fh_tb_board_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id10',   'title9',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id1',    'title0',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id2',    'title1',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id3',    'title2',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id4',    'title3',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id5',    'title4',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id6',    'title5',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id7',    'title6',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id8',    'title7',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id9',    'title8',   'content',    sysdate);
+insert into fh_tb_guestbook(idx, id, title, content, regdate) values(guestbook_seq.nextval,     'id10',   'title9',   'content',    sysdate);
 
