@@ -38,10 +38,11 @@
 				<div class="listWrap">
 					<div class="left">
 						<ul>
+							<li><a href="/views/manage/login.jsp">로  그  인</a></li>
 							<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
+							<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
 							<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
 							<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
-							<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
 						</ul>
 					</div>
 					<div class="content">
