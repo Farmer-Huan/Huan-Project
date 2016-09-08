@@ -118,7 +118,7 @@
 				<div class="listWrap">
 					<div class="left">
 						<ul>
-							<li><a href="#">메뉴1-1</a></li>
+							<li><a href="/views/manage/login.jsp">로그인</a></li>
 							<li><a href="#">메뉴1-2</a></li>
 							<li><a href="#">메뉴1-3</a></li>
 							<li><a href="#">메뉴1-4</a></li>

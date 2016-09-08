@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" session = "true"%>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "java.util.*" %>
@@ -12,6 +12,18 @@
 	<meta name="Description" content="">
 	<title>Document</title>
 	<link rel="stylesheet" href="/css/layout.css" />
+	<%
+		request.setCharacterEncoding("utf-8");
+		String id = request.getParameter("id");
+		String pwd = request.getParameter("pwd");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("id", id);
+		map.put("pwd", pwd);
+ 		// session에 "logMap"인 키 값과 map의  value값을 설정한다.
+		session.setAttribute("logMap", map);
+	 %>
 </head>
 <body>
 	<div class="wrap">
@@ -42,7 +54,9 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
+						<li><a href="/views/manage/login.jsp">로   그   인</a></li>
 						<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
+						<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
 						<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
 						<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
 						<li><a href="/views/manage/memberUpdate.jsp">회 원 관 리</a></li>
@@ -99,8 +113,8 @@
 								<%
 									while(rs.next()){
 										int idx = rs.getInt("idx");
-										String id = rs.getString("id");
-										String pwd = rs.getString("pwd");
+										id = rs.getString("id");
+										pwd = rs.getString("pwd");
 										String phone = rs.getString("phone");
 										String email = rs.getString("email");
 										Timestamp regdate = rs.getTimestamp("regdate");
