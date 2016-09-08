@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%@ page import = "java.sql.*" %>
 <!doctype html>
 <html lang="ko">
@@ -10,6 +11,33 @@
 	<meta name="Description" content="">
 	<title>Document</title>
 	<link rel="stylesheet" href="/css/layout.css" />
+	<%
+		request.setCharacterEncoding("utf-8");
+		
+		String id = request.getParameter("id");
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String driver = "oracle.jdbc.OracleDriver";
+		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+		String db_id = DBConfig.DB_ID;
+		String db_pwd = DBConfig.DB_PW;
+		
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url, db_id, db_pwd);
+			// where = 조건
+			String strQuery = "select * " + 
+								"from fh_tb_user " + 
+								"where id = ?";
+		
+			pstmt = conn.prepareStatement(strQuery);
+		
+			pstmt.setString(1,id);
+			rs = pstmt.executeQuery();
+	%>
 </head>
 <body>
 	<div class="wrap">
@@ -39,10 +67,12 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="/views/manage/login.jsp">로 그 인</a></li>
-						<li><a href="/views/manage/memberList.jsp">회원목록</a></li>
+						<li><a href="/views/manage/login.jsp">로   그   인</a></li>
+						<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
+						<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
 						<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
-						<li><a href="#">메뉴1-4</a></li>
+						<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
+						<li><a href="/views/manage/memberUpdate.jsp">회 원 관 리</a></li>
 					</ul>
 				</div>
 				<!--  contentWrap - listWrap end -->
@@ -50,39 +80,14 @@
 					<div class="contentNav">회원관리 &gt; 회원정보 &gt; 수정</div>
 					<div class="regist">
 						<%
-							request.setCharacterEncoding("utf-8");
-							
-							String id = request.getParameter("id");
-							
-							Connection conn = null;
-							PreparedStatement pstmt = null;
-							ResultSet rs = null;
-							
-							String driver = "oracle.jdbc.OracleDriver";
-							String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-							String db_id = "kslsr";
-							String db_pwd = "1234";
-							
-							try {
-								Class.forName(driver);
-								conn = DriverManager.getConnection(url, db_id, db_pwd);
-								// where = 조건
-								String strQuery = "select * from fh_tb_user " + 
-													"where id = ?";
-							
-								pstmt = conn.prepareStatement(strQuery);
-							
-								pstmt.setString(1,id);
-								rs = pstmt.executeQuery();
-								// 오류 발생 rs.getString(""); 전에 
-								// while 이나 if 로 rs.next() 해줘야 함
-							
-								while (rs.next()){
-							
-									String pwd = rs.getString("pwd");
-									String phone = rs.getString("phone");
-									String email = rs.getString("email");
-									Timestamp regdate = rs.getTimestamp("regdate");
+							// 오류 발생 rs.getString(""); 전에 
+							// while 이나 if 로 rs.next() 해줘야 함
+							while (rs.next()){
+						
+								String pwd = rs.getString("pwd");
+								String phone = rs.getString("phone");
+								String email = rs.getString("email");
+								Timestamp regdate = rs.getTimestamp("regdate");
 						%>
 						<form method = "post" name = "upForm" id = "upForm" action = "/views/manage/updateOK.jsp">
 							<table>

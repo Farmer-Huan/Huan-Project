@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%@ page import = "java.sql.*" %>
 <!doctype html>
 <html lang="ko">
@@ -38,10 +39,12 @@
 				<div class="listWrap">
 					<div class="left">
 						<ul>
-							<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
-							<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
-							<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
-							<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
+							<li><a href="/views/manage/login.jsp">로   그   인</a></li>
+						<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
+						<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
+						<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
+						<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
+						<li><a href="/views/manage/memberUpdate.jsp">회 원 관 리</a></li>
 						</ul>
 					</div>
 					<div class="content">
@@ -70,8 +73,8 @@
 								  	
 								  	String driver = "oracle.jdbc.driver.OracleDriver";
 								  	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-								  	String db_id = "kslsr";
-								  	String db_pwd = "1234";
+								  	String db_id = DBConfig.DB_ID;
+									String db_pwd = DBConfig.DB_PW;
 								  	try {
 								  		
 									  	Class.forName(driver);

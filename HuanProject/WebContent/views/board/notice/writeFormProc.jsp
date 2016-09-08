@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%@ page import = "java.sql.*" %>
-
 <%
 	request.setCharacterEncoding("utf-8");
 
 	String driver = "oracle.jdbc.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String db_id = "kslsr";
-	String db_pwd = "1234";
+	String id = DBConfig.DB_ID;
+	String pw = DBConfig.DB_PW;
 	
 	int i = 0;
 	
@@ -27,7 +27,7 @@
 	try {
 		Class.forName(driver);
 		
-		conn = DriverManager.getConnection(url, db_id, db_pwd);
+		conn = DriverManager.getConnection(url, id, pw);
 		
 		pstmt = conn.prepareStatement(sql);
 		

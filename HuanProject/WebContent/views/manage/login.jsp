@@ -10,6 +10,13 @@
   <meta name="Description" content="">
   <title>Document</title>
   <link rel="stylesheet" href="/css/layout.css" />
+  <script type="text/javascript">
+  	function procLogin(){
+  		var frm = document.logForm;
+  		frm.action = "/views/manage/memberList.jsp";
+  		frm.submit();
+  	}
+  </script>
  </head>
  <body>
 	<div class="wrap">
@@ -38,16 +45,18 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="#">메뉴1-1</a></li>
-						<li><a href="#">메뉴1-2</a></li>
-						<li><a href="#">메뉴1-3</a></li>
-						<li><a href="#">메뉴1-4</a></li>
+						<li><a href="/views/manage/login.jsp">로   그   인</a></li>
+						<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
+						<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
+						<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
+						<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
+						<li><a href="/views/manage/memberUpdate.jsp">회 원 관 리</a></li>
 					</ul>
 				</div>
 				<div class="content">
 					<div class="contentNav">회원관리 &gt; 로그인</div>
 					<div class="list">
-						<form action = "#" method = "post">
+						<form action = "#" method = "post" name = "logForm">
 							<table>
 								<colgroup>
 									<col width="80px" />
@@ -70,7 +79,7 @@
 							</table>
 						</form>
 						<div class = "btn">
-							<a href = "/" class = "btn_g">로그인</a>
+							<a href = "javascript:procLogin();" class = "btn_g">로그인</a>
 							<a href = "/views/manage/regist.jsp" class = "btn_g">회원가입</a>
 						</div>
 						<div class="paging">
