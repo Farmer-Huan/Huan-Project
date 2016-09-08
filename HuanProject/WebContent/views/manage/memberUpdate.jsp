@@ -83,7 +83,8 @@
 									  	// 결과 값을 출력하기 위한 방법
 									  	stmt = conn.createStatement();
 									
-									  	String sql = "select * from fh_tb_user";
+									  	String sql = "select * " + 
+									  				"from fh_tb_user";
 									  	
 									  	rs = stmt.executeQuery(sql);
 								%>	
