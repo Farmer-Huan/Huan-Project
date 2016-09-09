@@ -1,40 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
+<%@ page import = "java.util.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String id = "",
-				pwd = "",
-				title = "",
-				content = "";
 	
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
 	
-	request.setCharacterEncoding("UTF-8");
-	
-	id = request.getParameter("id");
-	pwd = request.getParameter("pwd");
-	title = request.getParameter("title");
-	content = request.getParameter("content");
-	
-	String qcquery = "insert into fh_tb_qna(idx, id, pwd, title, content, regdate) values(qna_seq.nextval, '"+id+"', '"+pwd+"','"+title+"', '"+content+"', sysdate)";
-	
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(qcquery);
+		rs = stmt.executeQuery("select * from fh_tb_user");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel = "stylesheet" type = "text/css" href="/css/layout.css">
-<title>Project BARISTA - QnA</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
+<title>Project BARISTA - Login STD</title>
 </head>
 <body>
 
@@ -88,21 +76,57 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
-						<div class="list">
-						<div class="ft12">
-						작성하였습니다.
-						</div>
-						<div>
-							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna/qna.jsp'">
-						</div>
+					
+					<%
+						if(sid == "" || sid == null) {
+					%>
+					<div class="list">
+						<form method = "post" name = "logintest" action = "/views/board/qna/loginSTDcheck.jsp">
+							<table>
+								<colgroup>
+									<col width="150px" />
+									<col width="*" />
+								</colgroup>
+								<thead>
+									<tr>
+										<th colspan="4">로그인</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class = "tl pl5">아이디</td>
+										<td class = "tl pl5"><input type = "text" name = "uid"></td>
+									</tr>
+									<tr>
+										<td class = "tl pl5">비밀번호</td>
+										<td class = "tl pl5"><input type = "password" name = "upwd"></td>
+									</tr>
+								</tbody>
+							</table>
+							<div>
+								<input type = "submit" value = "LOGIN">
+							</div>
+						</form>
 					</div>
+					<%
+						} else {
+					%>
+					<div class="ft12">
+						<br><br>
+						<%=session_id %>님 하이헬로안녕?<br>
+						<br><br>
+					</div>
+					<input type = "button" value = "LOGOUT" onclick = "location.href='/views/board/qna/loginSTDout.jsp'">
+					<%
+						}
+					%>
 				</div>
 			</div>
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
 		
-		
+
 	<%
 		}catch(SQLException e){
 			System.out.println(e);
