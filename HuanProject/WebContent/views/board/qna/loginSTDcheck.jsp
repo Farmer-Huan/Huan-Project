@@ -1,69 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
+<%@ page import = "java.util.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String id = "",
-				pwd = "",
-				title = "",
-				content = "";
+	ResultSet rs2 = null;
 	
 	String dbID = DBConfig.DB_ID;
 	String dbPW = DBConfig.DB_PW;
-	
-	request.setCharacterEncoding("UTF-8");
-	
-	id = request.getParameter("id");
-	pwd = request.getParameter("pwd");
-	title = request.getParameter("title");
-	content = request.getParameter("content");
-	
-	String qcquery = "insert into fh_tb_qna(idx, id, pwd, title, content, regdate) values(qna_seq.nextval, '"+id+"', '"+pwd+"','"+title+"', '"+content+"', sysdate)";
-	
+
+	String uid = "",
+				upwd = "";
+	if(request.getParameter("uid") != null && request.getParameter("upwd") != null){
+		uid = request.getParameter("uid");
+		upwd = request.getParameter("upwd");
+	}
 	try{
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(qcquery);
+		rs = stmt.executeQuery("select * from fh_tb_user");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel = "stylesheet" type = "text/css" href="/css/layout.css">
-<title>Project BARISTA - QnA</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
+<title>Project BARISTA - Login STD</title>
 </head>
 <body>
 
-	
+
 	<div class="wrap">
 		<div class="header">
 			<div>
 				<div class="huanImg">
-					<div class="login">
-						<div>
-							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
-							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
-								if(sid == "" || sid == null) {
-							%>
-							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
-							<a href="/views/manage/regist.jsp">회원가입</a>
-							<%
-								}else{
-							%>
-							<%=sid%>님 환영합니다. | <a href="/views/board/qna/loginSTDout.jsp">로그아웃</a>
-							<%
-								}
-							%>
-							<!-- -------------------------------------------------------------------------------------- -->
-						</div>
-					</div>
 					<img src="/img/FamHuan.png" />
 				</div>
 			</div>
@@ -88,28 +62,54 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
-						<div class="list">
-						<div class="ft12">
-						작성하였습니다.
-						</div>
-						<div>
-							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna/qna.jsp'">
-						</div>
+					<div class = "ft12">
+						<br><br>
+						<%
+							int count = 0;
+							List<Object> userdb = new ArrayList<Object>();
+							if(rs != null){
+								while(rs.next()){
+									userdb.add(rs.getString("id"));
+								}
+								if(userdb.contains(uid) == true){
+									String qy = "select * from fh_tb_user where id='" + uid + "'";
+									rs2 = stmt.executeQuery(qy);
+									if(rs2 != null){
+										while(rs2.next()){
+											if(rs2.getString("pwd").equals(upwd)){
+												session.setAttribute("session_id", uid);
+												session.setAttribute("session_pwd", upwd);
+												%>성공!<%
+											}else{
+												%>비밀번호 틀림!<%
+											}
+										}
+									}//rs2 end if
+								}else{
+									%>없는 아이디인데?<%
+								}
+							}
+						%>
+						</br><br><br>
 					</div>
+					<input type = "button" value = "BACK TO LoginTest" onclick = "location.href='/views/board/qna/loginSTD.jsp'">
 				</div>
 			</div>
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
-		
-		
+	
+	
 	<%
 		}catch(SQLException e){
 			System.out.println(e);
 		}catch(Exception e){
 			System.out.println(e);
 		}finally{
-			if(rs != null){
+			if(rs2 != null){
+				try{rs2.close();}
+				catch(SQLException e){}
+			}if(rs != null){
 				try{rs.close();}
 				catch(SQLException e){}
 			}if(stmt != null){
