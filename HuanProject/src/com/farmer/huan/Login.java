@@ -43,19 +43,19 @@ public class Login extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 		
-		HttpSession session = request.getSession();
-		
-		
-		String id = (String) request.getParameter("id");
-		String pw = (String) request.getParameter("pw");
-		
-		if(id.equals("test") && pw.equals("1234")) {
-			session.setAttribute("session_id", "test_session_1234");
-		} else {
-			session.setAttribute("session_id", "");
-		}
-		
-		response.sendRedirect("./main.jsp");
+//		HttpSession session = request.getSession();
+//		
+//		
+//		String id = (String) request.getParameter("id");
+//		String pw = (String) request.getParameter("pw");
+//		
+//		if(id.equals("test") && pw.equals("1234")) {
+//			session.setAttribute("session_id", "test_session_1234");
+//		} else {
+//			session.setAttribute("session_id", "");
+//		}
+//		
+//		response.sendRedirect("./main.jsp");
 //		RequestDispatcher dispatcher  = request.getRequestDispatcher("/views/main.jsp");
 //		dispatcher.forward(request, response);
 	}
