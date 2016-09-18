@@ -89,6 +89,7 @@ insert into fh_tb_user(idx, id, pwd, phone, email, regdate) values(idx_seq.nextv
 insert into fh_tb_user(idx, id, pwd, phone, email, regdate) values(idx_seq.nextval, 'rf',       'pwd', '23287654365', 'sdfasf@gmail.com',       sysdate);
 insert into fh_tb_user(idx, id, pwd, phone, email, regdate) values(idx_seq.nextval, 'ed',       'pwd', '01012341234', 'xcvxcv@gmail.com',       sysdate);
 insert into fh_tb_user(idx, id, pwd, phone, email, regdate) values(idx_seq.nextval, 'wd',       'pwd', '01012341234', 'yuiu@gmail.com',         sysdate);
+insert into fh_tb_user(idx, id, pwd, phone, email, regdate) values(idx_seq.nextval, 'test',     '1234','01012341234', 'test1234@gmail.com',     sysdate);
 
 insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id1',    'title0',   'content',    sysdate);
 insert into fh_tb_board_qna(idx, id, title, content, regdate) values(qna_seq.nextval,     'id2',    'title1',   'content',    sysdate);
