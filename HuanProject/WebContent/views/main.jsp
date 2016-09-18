@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%@ page import = "java.sql.*" %>
+<%@ page import = "java.util.*" %>
 <!DOCTYPE html>
 <html lang = "ko">
 <head>
@@ -21,27 +22,35 @@
 	<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
 		
 	<%
-		//Object session_id = session.getAttribute("session_id");
-		//String sid = (String) session_id;
-		//if(sid == "" || sid == null) {
-		//	out.println("session null");
-		//} else {
-		//	out.println("session_id: " + session_id);
-		//}
+		if(session.getAttribute("session_map") != null) {
+			out.println("session_map #############");
+			HashMap<String, Object> session_map = (HashMap<String, Object>) session.getAttribute("session_map");
+			if (session_map.containsKey("user_id")) {
+				out.println(session_map.get("user_id") + " 님 로그인 중.");				
+			}
+			
+			if ((Boolean) session_map.get("s_isNew")) {
+				out.println("test1");
+			} else {
+				out.println("test2");
+			}
+		}
 	%>
 
 	<div class="wrap">
 			<div class="header">
 				<div class="top_header">
 					<div class="login">
-						<form method="post" action="/views/manage/login.jsp">
+						<form method="post" action="/views/manage/login_proc.jsp">
 							<textblock>아이디&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</textblock>
 						 	<input id="login_id" name="id" type="text" value="" placeholder="id" /> <br/>
 						 	<textblock>비밀번호&nbsp;&nbsp;</textblock>
-						 	<input id="login_pw" name="pw" type="text" value="" placeholder="password" /> <br/>
+						 	<input id="login_pw" name="pw" type="password" value="" placeholder="password" /> <br/>
 						 	<p>
-							 	<input type="submit" name="login" value="로그인" />&nbsp;&nbsp;&nbsp; 
-							 	<input type="submit" name="join" value="회원가입" />
+							 	<input type="submit" name="login" value="로그인" />&nbsp;&nbsp;&nbsp;
+							 	<form method="post" action="/views/manage/logout_proc.jsp"> 
+							 		<input type="submit" name="logout" value="로그아웃" />
+						 		</form>
 						 	</p>
 					 	</form>
 					</div>
@@ -69,7 +78,8 @@
 						</ul>
 					</div>
 					<div class="content">
-						<h1 style="font-size: 25px !important;">메인 페이지</h1>
+						<h1 style="font-size: 25px !important;">메인 페이지 <br />
+						</h1>
 					</div>
 				</div>
 			</div>

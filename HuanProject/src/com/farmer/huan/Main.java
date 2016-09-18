@@ -2,6 +2,7 @@ package com.farmer.huan;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,6 +32,13 @@ public class Main extends HttpServlet {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 //		request.setCharacterEncoding("UTF-8");
+
+		/*
+		 * 
+		HashMap<String, Object> test = new HashMap<String, Object>();
+		test.put("test", new Double(0.0));
+		
+		 */
 		
 		response.sendRedirect("/views/main.jsp");
 		
