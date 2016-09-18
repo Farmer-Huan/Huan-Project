@@ -34,33 +34,34 @@ a {
 	height: 250px;
 }
 
-.wrap .header .huanImg {
+.wrap .header .top_header {
 	width: 1200px;
+	margin: 0 auto;
+	float: center;
+}
+
+.wrap .header .top_header .huanImg div {
+	float: right;
+}
+
+.wrap .header .top_header .huanImg img {
+	width: 900px;
 	height: 200px;
 	margin: 0 auto;
+	float: right;
 }
 
-.wrap .header .huanImg img {
-	width: 100%;
-	height: 100%;
+.wrap .header .top_header .login {
+	float: left;
+	padding: 50px 0 0 0;
 }
 
-.wrap .header .login {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-}
-
-.wrap .header .login div {
-	width: 1200px;
-	margin: 0 auto;
+.wrap .header .top_header .login div {
+	width: 300px;
 	text-align: right;
-	padding: 10px 50px 0 0;
-	color: #fff;
 }
 
-.wrap .header .login div a {
+.wrap .header .top_header .login div a {
 	color: #fff;
 	text-decoration: underline;
 }
@@ -69,6 +70,7 @@ a {
 	width: 1200px;
 	height: 50px;
 	margin: 0 auto;
+	float: center;
 }
 
 .wrap .header .topMenu .top_nav {
