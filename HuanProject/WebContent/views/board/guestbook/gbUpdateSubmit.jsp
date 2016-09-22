@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,32 +8,81 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "",
-				pwd = "",
-				title = "",
-				content = "";
+	String idx = "";
+	String id = "";
+	String pwd = "";
+	String title = "";
+	String content = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
+	
+	if(user != null){
+		sid = (String)user.get("id");
+	}
 	
 	request.setCharacterEncoding("UTF-8");
 	
-	id = request.getParameter("id");
-	pwd = request.getParameter("pwd");
-	title = request.getParameter("title");
-	content = request.getParameter("content");
-	idx = request.getParameter("idx");
-	int idx2 = Integer.parseInt(idx);
+	if(request.getParameter("id") != null){
+		id = request.getParameter("id");
+	}
+	
+	if(request.getParameter("pwd") != null){
+		pwd = request.getParameter("pwd");
+	}
+	
+	if(request.getParameter("title") != null){
+		title = request.getParameter("title");
+	}
+	
+	if(request.getParameter("content") != null){
+		content = request.getParameter("content");
+	}
+	
+	if(request.getParameter("idx") != null){
+		idx = request.getParameter("idx");
+	}
 	
 	String guppwd = "";
-	guppwd = request.getParameter("guppwd");
 	
-	String gupquery = "update fh_tb_guestbook set id = '"+id+"', title = '"+title+"', content = '"+content+"' where idx = " + idx2;
+	if(request.getParameter("guppwd") != null){
+		guppwd = request.getParameter("guppwd");
+	}
 	
+	
+	StringBuffer gupquery = new StringBuffer();
+	gupquery.append(" update");
+	gupquery.append(				" fh_tb_guestbook");
+	gupquery.append(" set");
+	gupquery.append(				" id = '" + id + "'");
+	gupquery.append(				" , title = '" + title + "'");
+	gupquery.append(				" , content = '" + content + "'");
+	gupquery.append(" where");
+	gupquery.append(				" idx = " + idx);
+	
+	String message = "";
+	int shownum = 0;
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
+		if(idx == "" | idx == null){
+			message = "글이 없습니다.";
+		}else if(pwd == "" | pwd == null){
+			message = "비밀번호가 잘못되었습니다.";
+		}else if(title == "" | title == null){
+			message = "제목이 잘못되었습니다.";
+		}else if(content == "" | content == null){
+			message = "내용이 잘못되었습니다.";
+		}else if(id == "" | id == null){
+			message = "이름이 잘못되었습니다.";
+		}else if(guppwd.equals(pwd) == false){
+			message = "비밀번호가 틀렸습니다.";
+		}else{
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(gupquery.toString());
+			message = "수정하였습니다.";
+			shownum = 1;
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -52,10 +102,7 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
-								if(sid == "" || sid == null) {
+								if(sid == "" | sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
 							<a href="/views/manage/regist.jsp">회원가입</a>
@@ -96,20 +143,16 @@
 					
 					<div class="list">
 						<div class="ft12">
-						<%
-						if(guppwd.equals(pwd)){
-							rs = stmt.executeQuery(gupquery);
-						%>
-						수정하였습니다.
-						<%
-						} else{
-						%>
-						비밀번호가 틀렸습니다.
-						<%
-						}
-						%>
+						<%=message %>
 						</div>
 						<div>
+						<%
+							if(shownum == 0){
+						%>
+							<input type = "button" value = "back to UPDATE" onclick = "history.back(); return false();">
+						<%
+							}
+						%>
 							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/guestbook/guestbook.jsp'">
 						</div>
 					</div>

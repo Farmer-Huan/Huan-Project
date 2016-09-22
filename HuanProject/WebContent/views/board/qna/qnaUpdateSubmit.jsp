@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,28 +8,52 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "",
-				pwd = "",
-				title = "",
-				content = "";
+	String idx = "";
+	String id = "";
+	String pwd = "";
+	String title = "";
+	String content = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
 	
-	request.setCharacterEncoding("UTF-8"); //한글 깨짐 처리
+	if(user != null){
+		sid = (String)user.get("id");
+	}
+	
+	request.setCharacterEncoding("UTF-8");
 	
 	id = request.getParameter("id");
 	title = request.getParameter("title");
 	content = request.getParameter("content");
 	idx = request.getParameter("idx");
-	int idx2 = Integer.parseInt(idx);
 	
-	String qupquery = "update fh_tb_qna set title = '"+title+"', content = '"+content+"' where idx = " +idx2;
+	StringBuffer qupquery = new StringBuffer();
+	qupquery.append(" update");
+	qupquery.append(				" fh_tb_qna");
+	qupquery.append(" set");
+	qupquery.append(				" title = '" + title + "'");
+	qupquery.append(				" , content = '" + content + "'");
+	qupquery.append(" where");
+	qupquery.append(				" idx = " + idx);
 	
+	String message = "";
+	int shownum = 0;
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
+		if(id == "" | id == null){
+			message = "다시 시도하세요.";
+		}else if(title == "" | title == null){
+			message = "제목이 잘못되었습니다.";
+		}else if(content == "" | content == null){
+			message = "내용이 잘못되었습니다.";
+		}else{
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(qupquery.toString());
+			message = "수정하였습니다.";
+			shownum = 1;
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -48,9 +73,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -89,23 +111,18 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
-					
 					<div class="list">
 						<div class="ft12">
-						<%
-						if(id.equals(sid)){
-							rs = stmt.executeQuery(qupquery);
-						%>
-						수정하였습니다.
-						<%
-						} else{
-						%>
-						본인만 가능합니다.
-						<%
-						}
-						%>
+							<%=message %>
 						</div>
 						<div>
+							<%
+								if(shownum == 0){
+							%>
+							<input type = "button" value = "back to UPDATE" onclick = "history.back(); return false();">
+							<%
+								}
+							%>
 							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna/qna.jsp'">
 						</div>
 					</div>

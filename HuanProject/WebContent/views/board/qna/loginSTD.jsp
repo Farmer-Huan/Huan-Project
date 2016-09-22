@@ -4,19 +4,16 @@
 <%@ page import = "java.util.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
-	Class.forName("oracle.jdbc.driver.OracleDriver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
+	int shownum = 0;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
-	
-	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery("select * from fh_tb_user");
-%>
+	if(user != null){
+		shownum = 1;
+		sid = (String)user.get("id");
+	}
+%>							
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -35,10 +32,7 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
-								if(sid == "" || sid == null) {
+								if(shownum == 0) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
 							<a href="/views/manage/regist.jsp">회원가입</a>
@@ -78,7 +72,7 @@
 					<div class="contentNav">게시판 &gt; QnA</div>
 					
 					<%
-						if(sid == "" || sid == null) {
+						if(shownum == 0) {
 					%>
 					<div class="list">
 						<form method = "post" name = "logintest" action = "/views/board/qna/loginSTDcheck.jsp">
@@ -113,7 +107,7 @@
 					%>
 					<div class="ft12">
 						<br><br>
-						<%=session_id %>님 하이헬로안녕?<br>
+						<%=sid %>님 하이헬로안녕?<br>
 						<br><br>
 					</div>
 					<input type = "button" value = "LOGOUT" onclick = "location.href='/views/board/qna/loginSTDout.jsp'">
@@ -127,23 +121,5 @@
 	</div>
 		
 
-	<%
-		}catch(SQLException e){
-			System.out.println(e);
-		}catch(Exception e){
-			System.out.println(e);
-		}finally{
-			if(rs != null){
-				try{rs.close();}
-				catch(SQLException e){}
-			}if(stmt != null){
-				try{stmt.close();}
-				catch(SQLException e){}
-			}if(conn != null){
-				try{conn.close();}
-				catch(SQLException e){}
-			}
-		}
-	%>
 </body>
 </html>

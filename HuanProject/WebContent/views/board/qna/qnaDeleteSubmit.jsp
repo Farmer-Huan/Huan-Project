@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,21 +8,46 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "";
+	String idx = "";
+	String id = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
 	
-	id = request.getParameter("id");
+	if(user != null){
+		sid = (String)user.get("id");
+	}
 	
-	idx = request.getParameter("qno");
-	int idx2 = Integer.parseInt(idx);
-	String delquery = "delete from fh_tb_qna where idx=" + idx2;
+	if(request.getParameter("id") != null){
+		id = request.getParameter("id");
+	}
 	
+	if(request.getParameter("qno") != null){
+		idx = request.getParameter("qno");
+	}
+	
+	StringBuffer qdelquery = new StringBuffer();
+	qdelquery.append(" delete");
+	qdelquery.append(" from");
+	qdelquery.append(				" fh_tb_qna");
+	qdelquery.append(" where");
+	qdelquery.append(				" idx = " + idx);
+	
+	String message = "";
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
+		if(id == "" | id == null){
+			message = "다시 시도하세요.";
+		}else{
+			if(sid.equals(id) == false){
+				message = "작성한 본인만 가능합니다.";
+			}else{
+				conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+				stmt = conn.createStatement();
+				rs = stmt.executeQuery(qdelquery.toString());
+				message = "삭제하였습니다.";
+			}
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -41,9 +67,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -84,18 +107,7 @@
 					<div class="contentNav">게시판 &gt; QnA</div>
 					<div class="list">
 						<div class="ft12">
-						<%
-						if(id.equals(sid)){
-							rs = stmt.executeQuery(delquery);
-						%>
-						삭제하였습니다.
-						<%
-						} else{
-						%>
-						본인만 가능합니다.
-						<%
-						}
-						%>
+							<%=message %>
 						</div>
 						<div>
 							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna/qna.jsp'">

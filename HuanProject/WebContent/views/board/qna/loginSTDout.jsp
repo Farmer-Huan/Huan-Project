@@ -39,8 +39,7 @@
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
 					<%
-					session.removeAttribute("session_id");
-					session.removeAttribute("session_pwd");
+					session.invalidate();
 					%>
 					<div class = "ft12">
 						<br><br>
