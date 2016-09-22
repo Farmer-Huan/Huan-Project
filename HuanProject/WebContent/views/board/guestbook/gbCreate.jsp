@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
+<%
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
+	
+	if(user != null){
+		sid = (String)user.get("id");
+	}
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,9 +28,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 

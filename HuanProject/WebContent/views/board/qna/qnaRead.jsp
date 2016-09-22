@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,26 +8,30 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "",
-				title = "",
-				content = "",
-				regdate = "";
+	String idx = "";
+	String id = "";
+	String title = "";
+	String content = "";
+	String regdate = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	int shownum = 0;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
+	
+	if(user != null){
+		shownum = 1;
+		sid = (String)user.get("id");
+	}
 	
 	if(request.getParameter("qno") != null){
 		idx = request.getParameter("qno");
-	}else{
-		idx = "0";
 	}
-
 	
+	//qpn = QnaPageNumber, back 버튼을 위한 직전 페이지의 번호
 	int qpn = 1;
 	if(request.getParameter("rno") != null){
 		qpn = Integer.parseInt(request.getParameter("rno"));
-	
 		if(qpn%10 != 0){
 			qpn = qpn/10+1;
 		}else{
@@ -34,12 +39,36 @@
 		}
 	}
 	
-	String qrquery = "select * from fh_tb_qna where idx="+idx;
+	StringBuffer qrquery = new StringBuffer();
+	qrquery.append(" select");
+	qrquery.append(				" *");
+	qrquery.append(" from");
+	qrquery.append(				" fh_tb_qna");
+	qrquery.append(" where");
+	qrquery.append(				" 1=1");
+	qrquery.append(" and");
+	qrquery.append(				" idx = " + idx);
 	
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(qrquery);
+		if(idx == "" || idx == null){
+			shownum = 3;
+		}else{
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(qrquery.toString());
+			if(rs != null){
+				while(rs.next()){
+					title = rs.getString("title");
+					id = rs.getString("id");
+					content = rs.getString("content");
+					regdate = rs.getString("regdate");
+				}
+				if(sid.equals(id) == false){
+					shownum = 2;
+				}
+			}
+		}
+		
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -60,9 +89,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -101,6 +127,20 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
+					<%
+						if(shownum == 3){
+					%>
+					<div class="list">
+						<div class="ft12">
+							글이 없습니다.
+						</div>
+					</div>
+					<div>
+						<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qna.jsp?qpn=<%=qpn%>'">
+					</div>
+					<%
+						}else{
+					%>
 					<div class="list">
 						<table>
 							<colgroup>
@@ -117,16 +157,6 @@
 									<th>작성일</th>
 								</tr>
 							</thead>		
-							<%
-								if(rs != null){
-									while(rs.next()){
-										idx = rs.getString("idx");
-										title = rs.getString("title");
-										id = rs.getString("id");
-										content = rs.getString("content");
-										regdate = rs.getString("regdate");
-									}
-							%>
 							<tbody>
 								<tr>
 									<td><%=idx%></td>
@@ -134,21 +164,17 @@
 									<td><%=id%></td>
 									<td><%=regdate%></td>
 								</tr>
-								
 								<tr>
 									<td colspan="4"><textarea cols = "100" rows = "10" readonly><%=content%></textarea></td>
 								</tr>
 							</tbody>
-							<%			
-								}//end if
-							%>
 						</table>	
 						
 						<div>
 							<%
-							if(id.equals(sid)){
+							if(shownum == 1){
 							%>
-							<input type = "button" value = "UPDATE" onclick = "location.href='/views/board/qna/qnaUpdate.jsp?qno=<%=idx%>'">
+							<input type = "button" value = "UPDATE" onclick = "location.href = '/views/board/qna/qnaUpdate.jsp?qno=<%=idx %>'">
 							<input type = "button" value = "DELETE" onclick = "location.href='/views/board/qna/qnaDelete.jsp?qno=<%=idx%>'">
 							<%
 							}
@@ -156,6 +182,9 @@
 							<input type = "button" value = "BACK" onclick = "location.href='/views/board/qna/qna.jsp?qpn=<%=qpn%>'">
 						</div>
 					</div>
+					<%
+						}
+					%>
 				</div>
 			</div>
 		</div>

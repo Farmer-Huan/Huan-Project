@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,29 +8,52 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				pwd = "";
+	String idx = "";
+	String pwd = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
 	
-	idx = request.getParameter("idx");
-	pwd = request.getParameter("pwd");
+	if(user != null){
+		sid = (String)user.get("id");
+	}
+	
+	if(request.getParameter("idx") != null){
+		idx = request.getParameter("idx");
+	}
+	
+	if(request.getParameter("pwd") != null){
+		pwd = request.getParameter("pwd");
+	}
 	
 	String gdpwd = "";
 	
 	if(request.getParameter("gdpwd") != null){
 		gdpwd = request.getParameter("gdpwd");
-	}else{
-		gdpwd = "0";
 	}
 
-	int idx2 = Integer.parseInt(idx);
-	String gdquery = "delete from fh_tb_guestbook where idx=" + idx2;
+	StringBuffer gdquery = new StringBuffer();
+	gdquery.append(" delete");
+	gdquery.append(" from");
+	gdquery.append(				" fh_tb_guestbook");
+	gdquery.append(" where");
+	gdquery.append(				" idx = " + idx);
 	
+	int shownum = 0;
+	String message = "";
 	try{
-		conn = DriverManager.getConnection("jdb:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
+		if(idx == "" | idx == null){
+			message = "글이 없습니다.";
+		}else if(gdpwd.equals(pwd) == false){
+			shownum = 1;
+			message = "비밀번호가 틀렸습니다.";
+		}else{
+			conn = DriverManager.getConnection("jdb:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(gdquery.toString());
+			message = "삭제하였습니다.";
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -49,9 +73,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -92,19 +113,19 @@
 					<div class="contentNav">게시판 &gt; Guestbook</div>
 					<div class="list">
 						<div class="ft12">
+							<%=message %>
+						</div>
+						<div>
 						<%
-						if(gdpwd.equals(pwd)){
-							rs = stmt.executeQuery(gdquery);
+							if(shownum == 1){
 						%>
-							삭제하였습니다.
+							<input type = "button" value = "back to DELETE" onclick = "location.href='/views/board/guestbook/gbDelete.jsp?gno=<%=idx%>'">
+						<%
+							}else{
+						%>
 							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/guestbook/guestbook.jsp'">
 						<%
-						} else{
-						%>
-							비밀번호가 틀렸습니다.
-							<input type = "button" value = "back to Delete" onclick = "location.href='/views/board/guestbook/gbDelete.jsp?gno=<%=idx%>'">
-						<%
-						}
+							}
 						%>
 						</div>
 					</div>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,19 +8,22 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "",
-				title = "",
-				content = "",
-				regdate = "";
+	String idx = "";
+	String id = "";
+	String title = "";
+	String content = "";
+	String regdate = "";
+
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	if(user != null){
+		sid = (String)user.get("id");
+	}
 	
 	if(request.getParameter("gno") != null){
 		idx = request.getParameter("gno");
-	}else{
-		idx = "0";
 	}
 	
 	int gpn = 1;
@@ -32,12 +36,37 @@
 		}
 	}
 	
-	String grquery = "select * from fh_tb_guestbook where idx = " + idx;
+	StringBuffer grquery = new StringBuffer();
+	grquery.append(" select");
+	grquery.append(				" *");
+	grquery.append("  from");
+	grquery.append(				" fh_tb_guestbook");
+	grquery.append(" where");
+	grquery.append(				" 1=1");
+	grquery.append(" and");
+	grquery.append(				" idx = " + idx);
 	
+	int shownum = 0;
+	String message = "";
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(grquery);
+		if(idx == "" | idx == null){
+			message = "글이 없습니다.";
+		}else{
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(grquery.toString());
+			shownum = 1;
+			
+			if(rs != null){
+				while(rs.next()){
+					idx = rs.getString("idx");
+					title = rs.getString("title");
+					id = rs.getString("id");
+					content = rs.getString("content");
+					regdate = rs.getString("regdate");
+				}
+			}
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -57,9 +86,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -98,6 +124,9 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; Guestbook</div>
+					<%
+						if(shownum == 1){
+					%>
 					<div class="list">
 						<table>
 							<colgroup>
@@ -115,16 +144,6 @@
 								</tr>
 							</thead>
 							<tbody>
-								<%
-									if(rs != null){
-										while(rs.next()){
-											idx = rs.getString("idx");
-											title = rs.getString("title");
-											id = rs.getString("id");
-											content = rs.getString("content");
-											regdate = rs.getString("regdate");
-										}
-								%>
 								<tr>
 									<td><%=idx%></td>
 									<td class="tl pl5"><%=title%></td>
@@ -135,11 +154,7 @@
 									<td colspan="4"><textarea cols="100" rows="10" readonly><%=content%></textarea></td>
 								</tr>
 								</tbody>
-								<%		
-									}//end if
-								%>
 						</table>
-						
 						<div class = "ft12">
 							<form method = "post" name = "gbread" action = "/views/board/guestbook/gbUpdate.jsp?gno=<%=idx%>">
 								수정하려면 비밀번호를 입력하세요.<br>
@@ -150,6 +165,20 @@
 							<input type = "button" value = "BACK" onclick = "location.href='/views/board/guestbook/guestbook.jsp?gpn=<%=gpn%>'">
 						</div>
 					</div>
+					<%
+						}else{
+					%>
+					<div class="list">
+						<div class="ft12">
+							<%=message %>
+						</div>
+						<div>
+							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/guestbook/guestbook.jsp'">
+						</div>
+					</div>
+					<%
+						}
+					%>
 				</div>
 			</div>
 		</div>

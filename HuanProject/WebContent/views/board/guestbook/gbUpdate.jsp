@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,35 +8,66 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "",
-				pwd = "",
-				title = "",
-				content = "",
-				regdate = "";
+	String idx = "";
+	String id = "";
+	String pwd = "";
+	String title = "";
+	String content = "";
+	String regdate = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
 	
-	String readpwd = "";
+	if(user != null){
+		sid = (String)user.get("id");
+	}
 	
 	if(request.getParameter("gno") != null){
 		idx = request.getParameter("gno");
-	}else{
-		idx = "0";
 	}
+	
+	String readpwd = "";
+	
 	if(request.getParameter("readpwd") != null){
 		readpwd = request.getParameter("readpwd");
-	}else{
-		readpwd = "0";
 	}
 	
-	String grquery = "select * from fh_tb_guestbook where idx=" + idx;
+	StringBuffer guquery = new StringBuffer();
+	guquery.append(" select");
+	guquery.append(				" *");
+	guquery.append(" from");
+	guquery.append(				" fh_tb_guestbook");
+	guquery.append(" where");
+	guquery.append(				" 1=1");
+	guquery.append(" and");
+	guquery.append(				" idx = " + idx);
 	
+	int shownum = 0;
+	String message = "";
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(grquery);
+		if(idx == "" | idx == null){
+			message = "글이 없습니다.";
+		}else{
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(guquery.toString());
+			shownum = 1;
+			
+			if(rs != null){
+				while(rs.next()){
+					id = rs.getString("id");
+					pwd = rs.getString("pwd");
+					title = rs.getString("title");
+					content = rs.getString("content");
+				}
+				
+				if(readpwd.equals(pwd) == false){
+					shownum = 2;
+					message = "비밀번호가 틀렸습니다.";
+				}
+			}
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -55,9 +87,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -96,20 +125,11 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; Guestbook</div>
+					<%
+						if(shownum == 1){
+					%>
 					<div class="list">
-						
-						<%
-							if(rs != null){
-								while(rs.next()){
-									id = rs.getString("id");
-									pwd = rs.getString("pwd");
-									title = rs.getString("title");
-									content = rs.getString("content");
-								}
-								if(readpwd.equals(pwd)){
-						%>
 						<form method = "post" name = "gbupdate" action = "/views/board/guestbook/gbUpdateSubmit.jsp">
-									
 							<table>
 								<colgroup>
 									<col width="80px" />
@@ -142,7 +162,6 @@
 										<td>비밀번호</td>
 										<td class = "tl pl5"><input type = "password" name = "guppwd"></td>
 									</tbody>
-	
 							</table>
 							<div class = "ft12">
 								<br>
@@ -153,19 +172,32 @@
 								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/guestbook/guestbook.jsp'">
 							</div>
 						</form>
-						<%
-								}else{
-						%>
-							<div class = "ft12"> 비밀번호가 틀렸습니다.</div>
-							<div>
-								<input type = "button" value = "BACK" onclick = "location.href = '/views/board/guestbook/gbRead.jsp?gno=<%=idx %>'">
-							</div>
-						<%
-								}
-							}//end if
-						%>
-						
 					</div>
+					<%
+						}else if(shownum == 2){
+					%>
+					<div class="list">
+						<div class = "ft12">
+							<%=message %>
+						</div>
+						<div>
+							<input type = "button" value = "BACK" onclick = "location.href = '/views/board/guestbook/gbRead.jsp?gno=<%=idx %>'">
+						</div>
+					</div>
+					<%
+						}else{
+					%>
+					<div class="list">
+						<div class = "ft12">
+							<%=message %>
+						</div>
+						<div>
+							<input type = "button" value = "BACK to Guestbook" onclick = "location.href = '/views/board/guestbook/guestbook.jsp'">
+						</div>
+					</div>
+					<%
+						}
+					%>
 				</div>
 			</div>
 		</div>

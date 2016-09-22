@@ -1,5 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
+<%
+	int shownum = 0;
+	String sid = "";
+	String spwd = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
+	
+	if(user != null){
+		shownum = 1;
+		sid = (String)user.get("id");
+		spwd = (String)user.get("pwd");
+	}	
+%>
 <!DOCTYPE html PUBLIC "-/W3C/DTD HTML 4.01 Transitional/EN" "http:/www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,10 +32,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								Object session_pwd = session.getAttribute("session_pwd");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -60,20 +70,19 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
+					<%
+						if(shownum == 1){
+					%>
 					<div class="list">
-						
 						<form method = "post" name = "qnacreate" action ="/views/board/qna/qnaCreateSubmit.jsp">
 							<table>
 								<colgroup>
 									<col width="80px" />
 									<col width="*" />
-									<col width="80px" />
-									<col width="80px" />
 								</colgroup>
 								<thead>
 									<tr>
-										<th>글쓰기</th>
-										<th></th>
+										<th colspan = "2">글쓰기</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -88,20 +97,33 @@
 								</tbody>
 							</table>
 							<div>
-								<input type = "hidden" name = "id" value = "<%= session_id %>">
-								<input type = "hidden" name = "pwd" value = "<%= session_pwd %>">
+								<input type = "hidden" name = "id" value = "<%= sid %>">
+								<input type = "hidden" name = "pwd" value = "<%= spwd %>">
 								<input type = "submit" value = "SUBMIT">
 								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qna/qna.jsp'">
 							</div>
 						</form>
-						
 					</div>
+					<%
+						} else{
+					%>
+					<div class="list">
+						<div class = "ft12">
+							로그인하세요.
+						</div>
+						<div>
+							<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/qna/qna.jsp'">
+						</div>
+					</div>
+					
+					<%
+						}
+					%>
 				</div>
 			</div>
+			<div class="footer"><span>copy right</span></div>
 		</div>
-		<div class="footer"><span>copy right</span></div>
 	</div>
-
 
 
 </body>

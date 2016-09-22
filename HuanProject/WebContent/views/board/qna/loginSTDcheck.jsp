@@ -8,21 +8,56 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
-	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
 
 	String uid = "",
 				upwd = "";
+	
 	if(request.getParameter("uid") != null && request.getParameter("upwd") != null){
 		uid = request.getParameter("uid");
 		upwd = request.getParameter("upwd");
 	}
+	
+	StringBuffer udquery = new StringBuffer();
+	udquery.append(" select");
+	udquery.append(				" decode(pwd, '"+ upwd + "', 'Y', 'N') result");
+	udquery.append(" from");
+	udquery.append(				" fh_tb_user");
+	udquery.append(" where");
+	udquery.append(				" 1=1");
+	udquery.append(" and");
+	udquery.append(				" id = '" + uid + "'");
+
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery("select * from fh_tb_user");
+		rs = stmt.executeQuery(udquery.toString());
+		
+		String result ="";
+		
+		if(rs != null){
+			while(rs.next()){
+				result = rs.getString("result");
+			}
+		}
+		
+		String message = "";
+		
+		if(result.equals("")){
+			message = "아이디가 틀렸습니다";
+		}else{
+			if(result.equals("Y")){
+				HttpSession se = request.getSession();
+				Map<String, Object> userdata = new HashMap<String, Object>();
+				userdata.put("id", uid);
+				userdata.put("pwd", upwd);
+				se.setAttribute("user", userdata);
+				message = uid + " 님 환영합니다.";
+				
+				
+			}else{
+				message = "비밀번호가 틀렸습니다";
+			}
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -64,35 +99,10 @@
 					<div class="contentNav">게시판 &gt; QnA</div>
 					<div class = "ft12">
 						<br><br>
-						<%
-							int count = 0;
-							List<Object> userdb = new ArrayList<Object>();
-							if(rs != null){
-								while(rs.next()){
-									userdb.add(rs.getString("id"));
-								}
-								if(userdb.contains(uid) == true){
-									String qy = "select * from fh_tb_user where id='" + uid + "'";
-									rs2 = stmt.executeQuery(qy);
-									if(rs2 != null){
-										while(rs2.next()){
-											if(rs2.getString("pwd").equals(upwd)){
-												session.setAttribute("session_id", uid);
-												session.setAttribute("session_pwd", upwd);
-												%>성공!<%
-											}else{
-												%>비밀번호 틀림!<%
-											}
-										}
-									}//rs2 end if
-								}else{
-									%>없는 아이디인데?<%
-								}
-							}
-						%>
+						<%=message%>
 						</br><br><br>
 					</div>
-					<input type = "button" value = "BACK TO LoginTest" onclick = "location.href='/views/board/qna/loginSTD.jsp'">
+					<input type = "button" value = "back to LoginTest" onclick = "location.href='/views/board/qna/loginSTD.jsp'">
 				</div>
 			</div>
 		</div>
@@ -106,10 +116,7 @@
 		}catch(Exception e){
 			System.out.println(e);
 		}finally{
-			if(rs2 != null){
-				try{rs2.close();}
-				catch(SQLException e){}
-			}if(rs != null){
+			if(rs != null){
 				try{rs.close();}
 				catch(SQLException e){}
 			}if(stmt != null){

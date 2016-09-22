@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,15 +8,20 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
-	String rnum = "",
-				idx = "",
-				id = "",
-				title = "",
-				regdate = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String rnum = "";
+	String idx = "";
+	String id = "";
+	String title = "";
+	String regdate = "";
+	
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
+	
+	if(user != null){
+		sid = (String)user.get("id");
+	}
 	
 	int gbpage = 1;
 	if(request.getParameter("gpn") != null){
@@ -29,13 +35,49 @@
 	int gmaxcount = 0;
 	int gpend = 10;
 	
-	String gpquery = "select * from (select rownum as rnum,idx,id,pwd,title,content,regdate from (select * from fh_tb_guestbook order by idx desc) where rownum <= " + gbpage*10 +") where rnum > " + (gbpage-1)*10;
-	String maxquery = "select max(rownum) from fh_tb_guestbook";
+	StringBuffer gpquery = new StringBuffer();
+	gpquery.append(" select");
+	gpquery.append(				" *");
+	gpquery.append(" from(");
+	gpquery.append(				" select");
+	gpquery.append(							" rownum as rnum");
+	gpquery.append(							" , idx");
+	gpquery.append(							" , id");
+	gpquery.append(							" , pwd");
+	gpquery.append(							" , title");
+	gpquery.append(							" , content");
+	gpquery.append(							" , regdate");
+	gpquery.append(				" from(");
+	gpquery.append(							" select");
+	gpquery.append(										" *");
+	gpquery.append(							" from");
+	gpquery.append(										" fh_tb_guestbook");
+	gpquery.append(							" where");
+	gpquery.append(										" 1=1");
+	gpquery.append(							" order by");
+	gpquery.append(										" idx");
+	gpquery.append(										" desc)");
+	gpquery.append(				" where");
+	gpquery.append(							" 1=1");
+	gpquery.append(				" and");
+	gpquery.append(							" rownum <= " + gbpage*10 + ")");
+	gpquery.append(" where");
+	gpquery.append(				" 1=1");
+	gpquery.append(" and");
+	gpquery.append(				" rnum > " + (gbpage-1)*10);
+	
+	StringBuffer maxquery = new StringBuffer();
+	maxquery.append(" select");
+	maxquery.append(				" count(*)");
+	maxquery.append(" from");
+	maxquery.append(				" fh_tb_guestbook");
+	maxquery.append(" where");
+	maxquery.append(				" 1=1");
 	
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
 		stmt = conn.createStatement();
-		rs = stmt.executeQuery(gpquery);
+		rs = stmt.executeQuery(gpquery.toString());
 	
 %>
 
@@ -57,9 +99,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -126,12 +165,14 @@
 								%>
 								<tr>
 									<td><%=idx%></td>
-									<td class="tl pl5"><a href="http://localhost:8080/views/board/guestbook/gbRead.jsp?gno=<%=idx%>&rno=<%=rnum%>"><%=title%></a></td>
+									<td class="tl pl5"><a href="/views/board/guestbook/gbRead.jsp?gno=<%=idx%>&rno=<%=rnum%>"><%=title%></a></td>
 									<td><%=id%></td>
 									<td><%=regdate%></td>
 								</tr>
 								<%		
 										}//end while
+										try{rs.close();}
+										catch(SQLException e){}
 									}//end if
 								%>
 							</tbody>
@@ -144,11 +185,11 @@
 						
 						<div class="paging">
 							<%
-								rs2 = stmt.executeQuery(maxquery);
-								if(rs2 != null){
-									while(rs2.next()){
-										gmaxcount = Integer.parseInt(rs2.getString("max(rownum)"))/10+1;
-										if(Integer.parseInt(rs2.getString("max(rownum)"))%10 == 0){
+								rs = stmt.executeQuery(maxquery.toString());
+								if(rs != null){
+									while(rs.next()){
+										gmaxcount = Integer.parseInt(rs.getString("count(*)"))/10+1;
+										if(Integer.parseInt(rs.getString("count(*)"))%10 == 0){
 											gmaxcount --;
 										}
 									}//end while
@@ -162,7 +203,7 @@
 							<%
 								if(gpcount > 1 && gmaxcount >= gbpage){
 							%>
-							<a href="http://localhost:8080/views/board/guestbook/guestbook.jsp?gpn=<%= gpcount-1 %>" class="prev"><img src="/img/btn_prev.gif" /></a>
+							<a href="/views/board/guestbook/guestbook.jsp?gpn=<%= gpcount-1 %>" class="prev"><img src="/img/btn_prev.gif" /></a>
 							<%
 								}
 								for(int i = 0; i < gpend; i++){
@@ -174,7 +215,7 @@
 										continue;
 									}//end if
 									%>
-							<a href="http://localhost:8080/views/board/guestbook/guestbook.jsp?gpn=<%= gpcount %>"><span><%= gpcount %></span></a>
+							<a href="/views/board/guestbook/guestbook.jsp?gpn=<%= gpcount %>"><span><%= gpcount %></span></a>
 							<%
 									gpcount++;
 								}// end for
@@ -183,7 +224,7 @@
 									if(gpend == 10 && gmaxcount-9 == gpcount-10){
 									}else{
 							%>
-							<a href="http://localhost:8080/views/board/guestbook/guestbook.jsp?gpn=<%= gpcount %>" class="next"><img src="/img/btn_next.gif" /></a>
+							<a href="/views/board/guestbook/guestbook.jsp?gpn=<%= gpcount %>" class="next"><img src="/img/btn_next.gif" /></a>
 							<%
 									}
 								}//end if

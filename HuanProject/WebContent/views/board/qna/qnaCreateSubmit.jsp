@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,27 +8,70 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String id = "",
-				pwd = "",
-				title = "",
-				content = "";
+	String id = "";
+	String pwd = "";
+	String title = "";
+	String content = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
+	
+	if(user != null){
+		sid = (String)user.get("id");
+	}
 	
 	request.setCharacterEncoding("UTF-8");
 	
-	id = request.getParameter("id");
-	pwd = request.getParameter("pwd");
-	title = request.getParameter("title");
-	content = request.getParameter("content");
+	if(request.getParameter("id") != null){
+		id = request.getParameter("id");
+	}
 	
-	String qcquery = "insert into fh_tb_qna(idx, id, pwd, title, content, regdate) values(qna_seq.nextval, '"+id+"', '"+pwd+"','"+title+"', '"+content+"', sysdate)";
+	if(request.getParameter("pwd") != null){
+		pwd = request.getParameter("pwd");
+	}
 	
+	if(request.getParameter("title") != null){
+		title = request.getParameter("title");
+	}
+
+	if(request.getParameter("content") != null){
+		content = request.getParameter("content");
+	}
+	
+	StringBuffer qcquery = new StringBuffer();
+	qcquery.append(" insert into");
+	qcquery.append(					" fh_tb_qna(");
+	qcquery.append(											" idx");
+	qcquery.append(											" , id");
+	qcquery.append(											" , pwd");
+	qcquery.append(											" , title");
+	qcquery.append(											" , content");
+	qcquery.append(											" , regdate)");
+	qcquery.append(" values(");
+	qcquery.append(					" qna_seq.nextval");
+	qcquery.append(					" , '"+ id + "'");
+	qcquery.append(					" , '" + pwd + "'");
+	qcquery.append(					" , '" + title + "'");
+	qcquery.append(					" , '" + content + "'");
+	qcquery.append(					" , sysdate)");
+
+	String message = "";
+	int shownum = 0;
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(qcquery);
+		if(id == "" | id == null){
+			message = "다시 시도하세요.";
+		}else if(title == "" | title == null){
+			message = "제목이 잘못되었습니다.";
+		}else if(content == "" | content == null){
+			message = "내용이 잘못되었습니다.";
+		}else{
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(qcquery.toString());
+			message = "등록되었습니다.";
+			shownum = 1;
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -47,9 +91,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -88,12 +129,22 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; QnA</div>
-						<div class="list">
+					<div class="list">
 						<div class="ft12">
-						작성하였습니다.
+							<%=message %>
 						</div>
 						<div>
+							<%
+								if(shownum == 1){
+							%>
 							<input type = "button" value = "back to LIST" onclick = "location.href='/views/board/qna/qna.jsp'">
+							<%
+								}else{
+							%>
+							<input type = "button" value = "back to CREATE" onclick = "location.href=history.back(); return false();">
+							<%
+								}
+							%>
 						</div>
 					</div>
 				</div>

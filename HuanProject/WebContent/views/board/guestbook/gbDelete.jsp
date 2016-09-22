@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
@@ -7,24 +8,56 @@
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String idx = "",
-				id = "",
-				pwd = "",
-				title = "",
-				content = "",
-				regdate = "";
+	String idx = "";
+	String id = "";
+	String pwd = "";
+	String title = "";
+	String content = "";
+	String regdate = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("user");
 	
-	idx = request.getParameter("gno");
-	int idx2 = Integer.parseInt(idx);
-	String gdquery = "select * from fh_tb_guestbook where idx=" + idx2;
+	if(user != null){
+		sid = (String)user.get("id");
+	}
 	
+	if(request.getParameter("gno") != null){
+		idx = request.getParameter("gno");
+	}
+	
+	StringBuffer gdquery = new StringBuffer();
+	gdquery.append(" select");
+	gdquery.append(				" *");
+	gdquery.append(" from");
+	gdquery.append(				" fh_tb_guestbook");
+	gdquery.append(" where");
+	gdquery.append(				" idx = " + idx);
+	
+	int shownum = 0;
+	String message = "";
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(gdquery);
+		if(idx == "" | idx == null){
+			message = "글이 없습니다.";
+		}else{
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(gdquery.toString());
+			shownum = 1;
+			message = "삭제하시려면 비밀번호를 입력하고 DELETE 버튼을 누르세요.";
+			
+			if(rs != null){
+				while(rs.next()){
+					idx = rs.getString("idx");
+					id = rs.getString("id");
+					pwd = rs.getString("pwd");
+					title = rs.getString("title");
+					content = rs.getString("content");
+					regdate = rs.getString("regdate");
+				}
+			}
+		}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -44,9 +77,6 @@
 						<div>
 							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
 							<%
-								Object session_id = session.getAttribute("session_id");
-								String sid = (String) session_id;
-								
 								if(sid == "" || sid == null) {
 							%>
 							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
@@ -85,6 +115,9 @@
 				</div>
 				<div class="content">
 					<div class="contentNav">게시판 &gt; Guestbook</div>
+					<%
+						if(shownum == 1){
+					%>
 					<div class="list">
 						<table>
 							<colgroup>
@@ -101,17 +134,6 @@
 									<th>작성일</th>
 								</tr>
 							</thead>		
-							<%
-								if(rs != null){
-									while(rs.next()){
-										idx = rs.getString("idx");
-										id = rs.getString("id");
-										pwd = rs.getString("pwd");
-										title = rs.getString("title");
-										content = rs.getString("content");
-										regdate = rs.getString("regdate");
-									}
-							%>
 							<tbody>
 								<tr>
 									<td><%=idx%></td>
@@ -123,12 +145,9 @@
 									<td colspan="4"><%=content%></td>
 								</tr>
 							</tbody>
-							<%			
-								}//end if
-							%>
 						</table>	
 						<div class="ft12">
-						삭제하시려면 비밀번호를 입력하고 DELETE 버튼을 누르세요.
+							<%=message %>
 						</div>
 						<div>
 							<form method = "post" name = "gbdelete" action ="/views/board/guestbook/gbDeleteSubmit.jsp?gno=<%=idx%>">
@@ -140,6 +159,20 @@
 							<input type = "button" value = "BACK" onclick = "location.href='/views/board/guestbook/gbRead.jsp?gno=<%=idx%>'">
 						</div>
 					</div>
+					<%
+						} else{
+					%>
+					<div class="list">
+						<div class="ft12">
+							<%=message %>
+						</div>
+						<div>
+							<input type = "button" value = "BACK" onclick = "location.href='/views/board/guestbook/gbRead.jsp?gno=<%=idx%>'">
+						</div>
+					</div>
+					<%
+						}
+					%>
 				</div>
 			</div>
 		</div>
