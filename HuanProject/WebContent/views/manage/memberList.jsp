@@ -36,8 +36,6 @@
 							<a href="/views/manage/login.jsp">로그인</a> | 
 							<a href="/views/manage/regist.jsp">회원가입</a>
 						</div>
-						<div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -95,7 +93,6 @@
 								  	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 								  	String db_id = DBConfig.DB_ID;
 									String db_pwd = DBConfig.DB_PW;
-								  	
 								  	try {
 								  		
 									  	Class.forName(driver);
@@ -104,20 +101,19 @@
 									  	// 결과 값을 출력하기 위한 방법
 									  	stmt = conn.createStatement();
 									
-									  	String sql = "select * " +
-									  				"from fh_tb_user " +
-									  				"order by idx desc";
+										StringBuffer sql = new StringBuffer();
+									  	sql.append("select * ");
+									  	sql.append("from fh_tb_user ");
+									  	sql.append("order by idx desc");
 									  	
-									  	rs = stmt.executeQuery(sql);
-								%>
-								<%
-									while(rs.next()){
-										int idx = rs.getInt("idx");
-										id = rs.getString("id");
-										pwd = rs.getString("pwd");
-										String phone = rs.getString("phone");
-										String email = rs.getString("email");
-										Timestamp regdate = rs.getTimestamp("regdate");
+									  	rs = stmt.executeQuery(sql.toString());
+										while(rs.next()){
+											int idx = rs.getInt("idx");
+											id = rs.getString("id");
+											pwd = rs.getString("pwd");
+											String phone = rs.getString("phone");
+											String email = rs.getString("email");
+											Timestamp regdate = rs.getTimestamp("regdate");
 								%>
 								<tr>
 									<td><%= idx %></td>
@@ -128,27 +124,27 @@
 									<td><%= regdate %></td>
 								</tr>
 								<%
-									}
+										}
 								%>
 							</tbody>
 							<%
-								} catch (ClassNotFoundException cnfe){
-					
-								} finally {
-									try {
-										if(rs != null){
-											rs.close();
+									} catch (ClassNotFoundException cnfe){
+						
+									} finally {
+										try {
+											if(rs != null){
+												rs.close();
+											}
+											if(stmt != null){
+												stmt.close();
+											}
+											if(conn != null){
+												conn.close();
+											}
+										} catch (SQLException sqle){
+											out.println(sqle.getMessage());
 										}
-										if(stmt != null){
-											stmt.close();
-										}
-										if(conn != null){
-											conn.close();
-										}
-									} catch (SQLException sqle){
-										out.println(sqle.getMessage());
 									}
-								}
 							%>
 						</table>
 						

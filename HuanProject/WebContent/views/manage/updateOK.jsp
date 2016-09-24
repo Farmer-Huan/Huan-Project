@@ -34,11 +34,12 @@
 
 			conn = DriverManager.getConnection(url, db_id, db_pwd);
 			// update [테이블] set [열] = '변경할값' where [조건]
-			String strQuery = "update fh_tb_user " + 
-								"set pwd = ?, phone = ?, email = ? " +
-								"where id = ?";
+			StringBuffer sql = new StringBuffer();
+			sql.append("update fh_tb_user ");
+			sql.append("set pwd = ?, phone = ?, email = ? ");
+			sql.append("where id = ?");
 
-			pstmt = conn.prepareStatement(strQuery);
+			pstmt = conn.prepareStatement(sql.toString());
 
 			pstmt.setString(1, pwd);
 			pstmt.setString(2, phone);

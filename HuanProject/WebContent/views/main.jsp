@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%@ page import = "java.sql.*" %>
-<%@ page import = "java.util.*" %>
-<!DOCTYPE html>
 <html lang = "ko">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -18,52 +16,101 @@
 	<title>HuanProject</title>
 </head>
 <body>
+<%
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+	String test = "";
+	
+	try {
+		Class.forName("oracle.jdbc.driver.OracleDriver");
 
+		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+		String db_id = DBConfig.DB_ID;
+		String db_pwd = DBConfig.DB_PW;
+
+		conn = DriverManager.getConnection(url, db_id, db_pwd);
+		stmt = conn.createStatement();
+		String sql = "select * " + 
+					"from FH_TB_USER";
+		rs = stmt.executeQuery(sql);
+	} catch (ClassNotFoundException e) {
+		out.println(e.toString());
+	} catch (SQLException e) {
+		out.println(e.toString());
+	} catch (Exception e) {
+		out.println("<p>");
+		out.println("Error: " + e.toString());
+		out.println("</p>");
+	}
+%>
+
+<div id="test" width="500px">
 	<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
-		
-	<%
-		if(session.getAttribute("session_map") != null) {
-			out.println("session_map #############");
-			HashMap<String, Object> session_map = (HashMap<String, Object>) session.getAttribute("session_map");
-			if (session_map.containsKey("user_id")) {
-				out.println(session_map.get("user_id") + " 님 로그인 중.");				
-			}
-			
-			if ((Boolean) session_map.get("s_isNew")) {
-				out.println("test1");
+	<p>
+		<form method="post" action="/views/manage/login.jsp">
+			<textblock>아이디:</textblock>
+		 	<input id="login_id" name="id" type="text" value="" /> <br/>
+		 	<textblock>비밀번호:</textblock>
+		 	<input id="login_pw" name="pw" type="text" value="" /> <br/>
+		 	<input type="submit" value="로그인" />
+	 	</form>
+		<%
+			Object session_id = session.getAttribute("session_id");
+			String sid = (String) session_id;
+			if(sid == "" || sid == null) {
+				out.println("session null");
 			} else {
-				out.println("test2");
+				out.println("session_id: " + session_id);
 			}
+		%>
+	</p>
+ 	<p></p>
+ 	<input type="button" value="regist.jsp" onclick="location.href='/views/manage/regist.jsp'"/>
+ 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/manage/memberlist.jsp'"/>
+ 	<input type="button" value="insert.jsp" onclick="location.href='/views/manage/insert.jsp'"/>
+ 	<p></p>
+ 	<table>
+	<%
+		try {
+			while (rs.next()) {
+	%>
+	
+		<tr>
+			<td><% out.println(rs.getString(1)); %></td>
+			<td><% out.println(rs.getString(2)); %></td>
+			<td><% out.println(rs.getString(3)); %></td>
+			<td><% out.println(rs.getString(4)); %></td>
+			<td><% out.println(rs.getString(5)); %></td>
+		</tr>
+	
+	<%	
+			}
+		} catch (Exception ex) {
+			out.println(ex.toString());
 		}
 	%>
-
+	</table>
+	</div>
 	<div class="wrap">
 			<div class="header">
-				<div class="top_header">
-					<div class="login">
-						<form method="post" action="/views/manage/login_proc.jsp">
-							<textblock>아이디&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</textblock>
-						 	<input id="login_id" name="id" type="text" value="" placeholder="id" /> <br/>
-						 	<textblock>비밀번호&nbsp;&nbsp;</textblock>
-						 	<input id="login_pw" name="pw" type="password" value="" placeholder="password" /> <br/>
-						 	<p>
-							 	<input type="submit" name="login" value="로그인" />&nbsp;&nbsp;&nbsp;
-							 	<form method="post" action="/views/manage/logout_proc.jsp"> 
-							 		<input type="submit" name="logout" value="로그아웃" />
-						 		</form>
-						 	</p>
-					 	</form>
-					</div>
+				<div>
 					<div class="huanImg">
+						<div class="login">
+							<div>
+								<a href="#">로그인</a> | 
+								<a href="#">회원가입</a>
+							</div>
+						</div>
 						<img src="/img/FamHuan.png" />
 					</div>
 				</div>
 				<div class="topMenu">
 					<ul class="top_nav">
-						<li><a href="/views/main.jsp">홈으로</a></li>
+						<li><a href="/views/manage/memberList.jsp">회원가입</a></li>
 						<li><a href="/views/board/notice/notice.jsp">공지사항</a></li>
-						<li><a href="/views/board/free/free.jsp">자유게시판</a></li>
-						<li><a href="/views/board/guestbook/guestbook.jsp">방명록</a></li>
+						<li><a href="#">메뉴3</a></li>
+						<li><a href="#">메뉴4</a></li>
 					</ul>
 				</div>
 			</div>
@@ -71,15 +118,104 @@
 				<div class="listWrap">
 					<div class="left">
 						<ul>
-							<li><a href="/views/main.jsp">홈으로</a></li>
-							<li><a href="/views/board/notice/notice.jsp">공지사항</a></li>
-							<li><a href="/views/board/free/free.jsp">자유게시판</a></li>
-							<li><a href="/views/board/guestbook/guestbook.jsp">방명록</a></li>
+							<li><a href="/views/manage/login.jsp">로그인</a></li>
+							<li><a href="#">메뉴1-2</a></li>
+							<li><a href="#">메뉴1-3</a></li>
+							<li><a href="#">메뉴1-4</a></li>
 						</ul>
 					</div>
 					<div class="content">
-						<h1 style="font-size: 25px !important;">메인 페이지 <br />
-						</h1>
+						<div class="contentNav">메뉴1 &gt; 메뉴1-1</div>
+						<div class="list">
+							<table>
+								<colgroup>
+									<col width="80px" />
+									<col width="*" />
+									<col width="80px" />
+									<col width="80px" />
+								</colgroup>
+								<thead>
+									<tr>
+										<th>번호</th>
+										<th>제목</th>
+										<th>작성자</th>
+										<th>작성일</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>10</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>9</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>8</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>7</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>6</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>5</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>4</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>3</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>2</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+									<tr>
+										<td>1</td>
+										<td class="tl pl5"><a href="#">몰라</a></td>
+										<td>test</td>
+										<td>2016.08.09</td>
+									</tr>
+								</tbody>
+							</table>
+
+							<div class="paging">
+								<a href="#" class="prev"><img src="/img/btn_prev.gif" /></a>
+								<strong><span>1</span></strong>
+								<a href="#"><span>2</span></a>
+								<a href="#"><span>3</span></a>
+								<a href="#"><span>4</span></a>
+								<a href="#"><span>5</span></a>
+								<a href="#" class="next"><img src="/img/btn_next.gif" /></a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

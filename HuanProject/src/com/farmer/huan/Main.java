@@ -2,7 +2,6 @@ package com.farmer.huan;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,50 +31,43 @@ public class Main extends HttpServlet {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 //		request.setCharacterEncoding("UTF-8");
-
-		/*
-		 * 
-		HashMap<String, Object> test = new HashMap<String, Object>();
-		test.put("test", new Double(0.0));
 		
-		 */
+//		response.sendRedirect("/src/main.jsp");
 		
-		response.sendRedirect("/views/main.jsp");
+		RequestDispatcher dispatcher  = request.getRequestDispatcher("/views/main.jsp");
+		dispatcher.forward(request, response);
+		System.out.println("한글 테스트2");
 		
-//		RequestDispatcher dispatcher  = request.getRequestDispatcher("/views/main.jsp");
-//		dispatcher.forward(request, response);
-//		System.out.println("한글 테스트2");
-//		
-//		// java test
-//		try {
-//			Class.forName("oracle.jdbc.driver.OracleDriver");
-//			
-//			Connection conn = null;
-//	 	  	Statement stmt = null;
-//	 	  	ResultSet rs = null;
-//	 		
-//	 	  	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-//	 	  	String id = "chandler";
-//	 	  	String pw = "test1234";
-// 	  	
-// 	  		conn = DriverManager.getConnection(url, id, pw);
-// 	 	  	stmt = conn.createStatement();
-// 	 	  	String sql = "SELECT * FROM FH_TB_USER";
-// 	 	  	rs = stmt.executeQuery(sql);
-// 	 	  	while (rs.next()) {
-// 	 	  		System.out.println(rs.getString(1));
-// 	 	  	}
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			System.out.println(e.toString());
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			System.out.println(e.toString());
-//		} catch (Exception e) {
-//			System.out.println(e.toString());
-//		}
+		// java test
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			Connection conn = null;
+	 	  	Statement stmt = null;
+	 	  	ResultSet rs = null;
+	 		
+	 	  	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+	 	  	String id = "chandler";
+	 	  	String pw = "test1234";
+ 	  	
+ 	  		conn = DriverManager.getConnection(url, id, pw);
+ 	 	  	stmt = conn.createStatement();
+ 	 	  	String sql = "SELECT * FROM FH_TB_USER";
+ 	 	  	rs = stmt.executeQuery(sql);
+ 	 	  	while (rs.next()) {
+ 	 	  		System.out.println(rs.getString(1));
+ 	 	  	}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.toString());
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
 	}
 
 	/**

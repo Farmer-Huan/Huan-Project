@@ -35,7 +35,7 @@
   			alert("비밀번호가 다릅니다.");
   			return;
   		}
-		regForm.action = "/views/manage/insert.jsp";
+		regForm.action = "/views/manage/memberInsert.jsp";
 		regForm.submit();
 	}
 	

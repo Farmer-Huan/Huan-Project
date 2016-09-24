@@ -20,16 +20,18 @@
 	String content = request.getParameter("content");
 	String pwd = request.getParameter("pwd");
 	
-	String sql = "insert into fh_tb_board_notice " +
-				"(idx, id, pwd, title, content, regdate) " +
-				"values ((select MAX(idx) + 1 from fh_tb_board_notice), ?, ?, ?, ?, sysdate)";
+	StringBuffer sql = new StringBuffer();
+	sql.append("insert into fh_tb_board_notice ");
+	sql.append("(idx, id, pwd, title, content, regdate) ");
+	sql.append("values ((select MAX(idx) + 1 from fh_tb_board_notice), ?, ?, ?, ?, sysdate)");
+
 	
 	try {
 		Class.forName(driver);
 		
 		conn = DriverManager.getConnection(url, id, pw);
 		
-		pstmt = conn.prepareStatement(sql);
+		pstmt = conn.prepareStatement(sql.toString());
 		
 		pstmt.setString(1, writer);
 		pstmt.setString(2, pwd);

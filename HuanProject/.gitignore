@@ -1,8 +1,2 @@
 /build/
-src/com/farmer/huan/DBConfig.java
-
-#
-# gitignore 적용되지 않을때
-# 임시 브랜치 하나 만들어서 cache 비우고 ignore 적용하기
-# http://blog.chopestory.net/266
-# 
+src/
