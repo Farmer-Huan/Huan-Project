@@ -79,11 +79,13 @@
 		// 여러 데이터를 반복해서 넣을 때 반복문을 사용할 수 있다.
 		
 		
-		String strQuery = "insert into fh_tb_user" +
-							"(idx, id, pwd, phone, email, regdate)" +
-							"values (idx_seq.nextval, ?, ?, ?, ?, sysdate)";
+		StringBuffer sql = new StringBuffer();
+		sql.append("insert into fh_tb_user ");
+		sql.append("(idx, id, pwd, phone, email, regdate) ");
+		sql.append("values ((select MAX(idx) + 1 from fh_tb_user), ?, ?, ?, ?, sysdate) ");
+
 		// conn 객체의 prepareStatement 메소드를 실행
-		pstmt = conn.prepareStatement(strQuery);
+		pstmt = conn.prepareStatement(sql.toString());
 		out.println("PreparedStatement 객체 얻기");
 		pstmt.setString(1, id);
 		pstmt.setString(2, pwd);
@@ -93,7 +95,6 @@
 		i = pstmt.executeUpdate();
 		out.println("쿼리 실행");
 		out.println(i + " 개의 행이 추가 되었습니다..");
-		
 		
 	} catch (ClassNotFoundException cnfe){
 		out.println("oracle.jdbc.driver.OracleDriver를 찾을 수 없습니다.");

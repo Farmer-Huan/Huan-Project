@@ -18,10 +18,13 @@
 		Class.forName(driver);
 		conn = DriverManager.getConnection(url, db_id, db_pwd);
 		// where = 조건
-		String strQuery = "delete from fh_tb_user " + 
-							"where id = ?";
+		StringBuffer sql = new StringBuffer();
+		sql.append("delete ");
+		sql.append("from fh_tb_user ");
+		sql.append("where ");
+		sql.append("id = ?");
 	
-		pstmt = conn.prepareStatement(strQuery);
+		pstmt = conn.prepareStatement(sql.toString());
 	
 		pstmt.setString(1,id);
 		

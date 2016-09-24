@@ -13,7 +13,7 @@
   <script type="text/javascript">
   	function procLogin(){
   		var frm = document.logForm;
-  		frm.action = "/views/manage/memberList.jsp";
+  		frm.action = "/views/manage/loginOK.jsp";
   		frm.submit();
   	}
   </script>

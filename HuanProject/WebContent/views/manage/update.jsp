@@ -29,11 +29,12 @@
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url, db_id, db_pwd);
 			// where = 조건
-			String strQuery = "select * " + 
-								"from fh_tb_user " + 
-								"where id = ?";
-		
-			pstmt = conn.prepareStatement(strQuery);
+			StringBuffer sql = new StringBuffer();
+			sql.append("select * ");
+			sql.append("from fh_tb_user ");
+			sql.append("where id = ?");
+
+			pstmt = conn.prepareStatement(sql.toString());
 		
 			pstmt.setString(1,id);
 			rs = pstmt.executeQuery();
@@ -148,7 +149,7 @@
 							<a href = "javascript:upForm.submit();">저장</a>
 							<a href = "/views/manage/memberList.jsp">회원목록</a>
 						</div>
-						<script>	
+						<script>
 							function update(){
 								document.upForm.submit();
 							}
