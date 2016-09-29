@@ -1,46 +1,113 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "com.farmer.huan.DBConfig" %>
 <%
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 	Connection conn = null;
-	Statement stmt = null;
+	PreparedStatement pstmt = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
-	String rnum = "",
-				idx = "",
-				id = "",
-				title = "",
-				regdate = "";
+	String rnum = "";
+	String idx = "";
+	String id = "";
+	String title = "";
+	String regdate = "";
 	
-	String dbID = DBConfig.DB_ID;
-	String dbPW = DBConfig.DB_PW;
+	String sid = "";
+	HttpSession se = request.getSession();
+	Map<String, Object> user = (Map<String, Object>)se.getAttribute("session_map");
 	
-	//----------------------------------------------------------------------------------------------------------------------------
-	//페이징처리
-	//qnapage = 10개씩 제목 보여지는 페이지 번호, qpn = QnaPageNumber/get으로 보내고 받는 qnapage 파라메터명
-	//qpcount = QnaPageCount/페이징 시작 번호, qmaxcount = QnaMaxCount/QnA 전체 글 갯수를 받아 페이지 갯수 계산
-	//maxquery = rownum으로 계산된 전체 글 갯수 받는 쿼리, qpend = QnaPageEnd/마지막 페이징 갯수
-	int qnapage = 1;
-	if(request.getParameter("qpn") != null){
-		qnapage = Integer.parseInt(request.getParameter("qpn"));
+	if(user != null){
+		sid = (String)user.get("user_id");
+		System.out.println("sid : " + sid);
 	}
-	int qpcount = qnapage/10 + 1;
-	if(qnapage%10 == 0){
-		qpcount --;
-	}
-	qpcount = qpcount*10-9;
-	int qmaxcount = 0;
-	int qpend = 10;
-	//----------------------------------------------------------------------------------------------------------------------------
 	
-	String qpquery = "select * from (select rownum as rnum,idx,id,pwd,title,content,regdate from (select * from fh_tb_qna order by idx desc) where rownum <= " + qnapage*10 +") where rnum > " + (qnapage-1)*10;
-	String maxquery = "select max(rownum) from fh_tb_qna";
+	StringBuffer qpquery = new StringBuffer();
+	qpquery.append(" select");
+	qpquery.append(				" *");
+	qpquery.append(" from (");
+	qpquery.append(				" select");
+	qpquery.append(							" rownum as rnum");
+	qpquery.append(							", idx");
+	qpquery.append(							", id");
+	qpquery.append(							", title");
+	qpquery.append(							", content");
+	qpquery.append(							", regdate");
+	qpquery.append(				" from (");
+	qpquery.append(							" select");
+	qpquery.append(										" *");
+	qpquery.append(							" from fh_tb_qna");
+	qpquery.append(							" where");
+	qpquery.append(										" 1=1");
+	qpquery.append(							" order by");
+	qpquery.append(										" idx");
+	qpquery.append(										" desc)");
+	qpquery.append(				" where");
+	qpquery.append(							" 1=1");
+	qpquery.append(				" and");
+	qpquery.append(							" rownum <= ?)");
+	qpquery.append(" where");
+	qpquery.append(				" 1=1");
+	qpquery.append(" and");
+	qpquery.append(				" rnum > ?");
+	
+	StringBuffer maxquery = new StringBuffer();
+	maxquery.append(" select");
+	maxquery.append(			" count(*)");
+	maxquery.append(" from");
+	maxquery.append(			" fh_tb_qna");
+	maxquery.append(" where");
+	maxquery.append(			" 1=1");	
+	
 	try{
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",dbID,dbPW);
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(qpquery);
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",DBConfig.DB_ID,DBConfig.DB_PW);
+		
+		//----------------------------------------------------------------------------------------------------------------------------
+		//페이징처리
+		//qnapage = 10개씩 제목 보여지는 페이지 번호 / qpn = QnaPageNumber, get으로 보내고 받는 qnapage 파라메터명
+		//qpcount = QnaPageCount, 페이징 시작 번호 / qmaxcount = QnaMaxCount, QnA 전체 글 갯수를 받아 페이지 갯수 계산
+		//maxquery = rownum으로 계산된 전체 글 갯수 받는 쿼리 / qpend = QnaPageEnd, 마지막 페이징 갯수
+		
+		pstmt = conn.prepareStatement(maxquery.toString());
+		rs = pstmt.executeQuery();
+		
+		int qnapage = 1;
+		if(request.getParameter("qpn") != null){
+			qnapage = Integer.parseInt(request.getParameter("qpn"));
+		}
+		int qpcount = qnapage/10 + 1;
+		if(qnapage%10 == 0){
+			qpcount --;
+		}
+		qpcount = qpcount*10-9;
+		int qmaxcount = 0;
+		int qpend = 10;
+		
+		if(rs != null){
+			while(rs.next()){
+				qmaxcount = Integer.parseInt(rs.getString("count(*)"))/10+1;
+				if(Integer.parseInt(rs.getString("count(*)"))%10 == 0){
+					qmaxcount --;
+				}
+			}//end while
+			if(qmaxcount<qnapage){
+				qpend = 0;
+			}else if(qmaxcount-qpcount<10){
+				qpend = qmaxcount - qpcount + 1; 
+			}
+			try{rs.close();}
+			catch(SQLException e){}
+			try{pstmt.close();}
+			catch(SQLException e){}
+		}//end if
+		
+		//----------------------------------------------------------------------------------------------------------------------------
+		
+		pstmt = conn.prepareStatement(qpquery.toString());
+		pstmt.setString(1, Integer.toString(qnapage*10));
+		pstmt.setString(2,Integer.toString((qnapage-1)*10));
+		rs = pstmt.executeQuery();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -51,64 +118,38 @@
 </head>
 <body>
 
-
 	
-	<div id="test" width="500px">
-		<!--  Path : //getServletContext().getRealPath("/")  </h3> -->
-		<p>
-			<%
-				Object session_id = session.getAttribute("session_id");
-				Object session_pw = session.getAttribute("session_pw");
-				String sid = (String) session_id;
-				String spw = (String) session_pw;
-				
-				if(sid == "" || sid == null) {
-			%>
-			<form method="post" action="/views/manage/login.jsp">
-				<textblock>아이디:</textblock>
-			 	<input id="login_id" name="id" type="text" value="" /> <br/>
-			 	<textblock>비밀번호:</textblock>
-			 	<input id="login_pw" name="pw" type="text" value="" /> <br/>
-			 	<input type="submit" value="로그인" />
-		 	</form>
-			<%
-				} else {
-			%>
-			<div class="ft12">
-				<%=session_id %>님 하이헬로안녕?<br>
-				네 비밀번호는 <%=session_pw %> 란다. 기억하니?<br>
-				<input type="button" value = "LOGOUT인 척 메인으로 가기" onclick = "location.href='/views/main.jsp'"/>
-			</div>
-			<%
-				}
-			%>
-			</p>
-	 	<p></p>
-	 	<input type="button" value="regist.jsp" onclick="location.href='/views/regist.jsp'"/>
-	 	<input type="button" value="memberlist.jsp" onclick="location.href='/views/memberlist.jsp'"/>
-	 	<input type="button" value="insert.jsp" onclick="location.href='/views/insert.jsp'"/>
-	 	<p></p>
-	 	
-	</div>
 	<div class="wrap">
 		<div class="header">
 			<div>
 				<div class="huanImg">
+					<img src="/img/FamHuan.png" />
 					<div class="login">
 						<div>
-							<a href="#">로그인</a> | 
-							<a href="#">회원가입</a>
+							<!-- -------------------------로그인/로그아웃 경로 완성되면 수정할 것------------------------- -->
+							<%
+								if(sid == "" || sid == null) {
+							%>
+							<a href="/views/board/qna/loginSTD.jsp">로그인</a> | 
+							<a href="/views/manage/regist.jsp">회원가입</a>
+							<%
+								}else{
+							%>
+							<%=sid%>님 환영합니다. | <a href="/views/board/qna/loginSTDout.jsp">로그아웃</a>
+							<%
+								}
+							%>
+							<!-- -------------------------------------------------------------------------------------- -->
 						</div>
 					</div>
-					<img src="/img/FamHuan.png" />
 				</div>
 			</div>
 			<div class="topMenu">
 				<ul class="top_nav">
-					<li><a href="#">메인</a></li>
-					<li><a href="#">게시판</a></li>
+					<li><a href="/">홈</a></li>
 					<li><a href="#">커피가이드</a></li>
-					<li><a href="#">회원</a></li>
+					<li><a href="/views/board/free/free.jsp">게시판</a></li>
+					<li><a href="/views/manage/login.jsp">회원관리</a></li>
 				</ul>
 			</div>
 		</div>
@@ -116,10 +157,10 @@
 			<div class="listWrap">
 				<div class="left">
 					<ul>
-						<li><a href="#">공지사항</a></li>
-						<li><a href="#">게시판</a></li>
-						<li><a href="http://localhost:8080/views/board/qna/qna.jsp">QnA</a></li>
-						<li><a href="http://localhost:8080/views/board/guestbook/guestbook.jsp">방명록</a></li>
+						<li><a href="/views/board/notice/notice.jsp">공지사항</a></li>
+						<li><a href="/views/board/free/free.jsp">게시판</a></li>
+						<li><a href="/views/board/qna/qna.jsp">QnA</a></li>
+						<li><a href="/views/board/guestbook/guestbook.jsp">방명록</a></li>
 					</ul>
 				</div>
 				<div class="content">
@@ -144,17 +185,12 @@
 								<%
 									if(rs != null){
 										while(rs.next()){
-											rnum = rs.getString("rnum");
-											idx = rs.getString("idx");
-											title = rs.getString("title");
-											id = rs.getString("id");
-											regdate = rs.getString("regdate").substring(0,10);
 								%>
 								<tr>
-									<td><%=idx%></td>
-									<td class="tl pl5"><a href="http://localhost:8080/views/board/qna/qnaRead.jsp?qno=<%=idx%>&rno=<%=rnum%>"><%=title%></a></td>
-									<td><%=id%></td>
-									<td><%=regdate%></td>
+									<td><%=rs.getString("idx")%></td>
+									<td class="tl pl5"><a href="/views/board/qna/qnaRead.jsp?qno=<%=rs.getString("idx")%>&rno=<%=rs.getString("rnum")%>"><%=rs.getString("title")%></a></td>
+									<td><%=rs.getString("id")%></td>
+									<td><%=rs.getString("regdate").substring(0,10)%></td>
 								</tr>
 								<%		
 										}//end while
@@ -167,30 +203,14 @@
 						</div>
 						
 						<%-- -------------------------------------------paging------------------------------------------- --%>
-						
 						<div class="paging">
-							<%
-								rs2 = stmt.executeQuery(maxquery);
-								if(rs2 != null){
-									while(rs2.next()){
-										qmaxcount = Integer.parseInt(rs2.getString("max(rownum)"))/10+1;
-										if(Integer.parseInt(rs2.getString("max(rownum)"))%10 == 0){
-											qmaxcount --;
-										}
-									}//end while
-									if(qmaxcount<qnapage){
-										qpend = 0;
-									}else if(qmaxcount-qpcount<10){
-										qpend = qmaxcount - qpcount + 1; 
-									}
-								}//end if
-							%>
 							<%
 								if(qpcount > 1 && qmaxcount >= qnapage){
 							%>
-							<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount-1 %>" class="prev"><img src="/img/btn_prev.gif" /></a>
+							<a href="/views/board/qna/qna.jsp?qpn=<%= qpcount-1 %>" class="prev"><img src="/img/btn_prev.gif" /></a>
 							<%
 								}
+							//--------------------------------------------페이지번호----------------------------------------------------
 								for(int i = 0; i < qpend; i++){
 									if(qpcount == qnapage){
 							%>
@@ -200,22 +220,22 @@
 										continue;
 									}//end if
 									%>
-							<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount %>"><span><%= qpcount %></span></a>
+							<a href="/views/board/qna/qna.jsp?qpn=<%= qpcount %>"><span><%= qpcount %></span></a>
 							<%
 									qpcount++;
 								}// end for
+							//----------------------------------------------------------------------------------------------------------
 								if(qpend < 10){
 								}else{
 									if(qpend == 10 && qmaxcount-9 == qpcount-10){
 									}else{
 							%>
-							<a href="http://localhost:8080/views/board/qna/qna.jsp?qpn=<%= qpcount %>" class="next"><img src="/img/btn_next.gif" /></a>
+							<a href="/views/board/qna/qna.jsp?qpn=<%= qpcount %>" class="next"><img src="/img/btn_next.gif" /></a>
 							<%
 									}
 								}//end if
 							%>
 						</div>
-						
 						<%-- --------------------------------------------------------------------------------------------- --%>
 						
 					</div>
@@ -225,7 +245,6 @@
 		<div class="footer"><span>copy right</span></div>
 	</div>
 	
-	
 
 	<%
 		}catch(SQLException e){
@@ -233,14 +252,11 @@
 		}catch(Exception e){
 			System.out.println(e);
 		}finally{
-			if(rs2 != null){
-				try{rs2.close();}
-				catch(SQLException e){}
-			}if(rs != null){
+			if(rs != null){
 				try{rs.close();}
 				catch(SQLException e){}
-			}if(stmt != null){
-				try{stmt.close();}
+			}if(pstmt != null){
+				try{pstmt.close();}
 				catch(SQLException e){}
 			}if(conn != null){
 				try{conn.close();}
