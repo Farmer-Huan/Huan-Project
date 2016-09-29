@@ -1,21 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.sql.*" %>
 <%@ page import = "java.util.*" %>
+<%@ page import = "com.farmer.huan.DBConfig" %>
 <%
+	int shownum = 0;
 	String sid = "";
 	HttpSession se = request.getSession();
 	Map<String, Object> user = (Map<String, Object>)se.getAttribute("session_map");
 	
 	if(user != null){
+		shownum = 1;
 		sid = (String)user.get("user_id");
 	}
-%>
+%>							
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel = "stylesheet" type = "text/css" href = "/css/layout.css">
-<title>Project BARISTA - Guestbook</title>
+<title>Project BARISTA - Login STD</title>
 </head>
 <body>
 
@@ -65,57 +69,57 @@
 					</ul>
 				</div>
 				<div class="content">
-					<div class="contentNav">게시판 &gt; Guestbook</div>
+					<div class="contentNav">게시판 &gt; QnA</div>
+					
+					<%
+						if(shownum == 0) {
+					%>
 					<div class="list">
-						
-						<form method = "post" name = "gbcreate" action ="/views/board/guestbook/gbCreateSubmit.jsp">
+						<form method = "post" name = "logintest" action = "/views/board/qna/loginSTDcheck.jsp">
 							<table>
 								<colgroup>
-									<col width="80px" />
+									<col width="150px" />
 									<col width="*" />
-									<col width="80px" />
-									<col width="80px" />
 								</colgroup>
 								<thead>
 									<tr>
-										<th>글쓰기</th>
-										<th></th>
+										<th colspan="4">로그인</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>이름</td>
-										<td class = "tl pl5"><input type = "text" name = "id"></td>
+										<td class = "tl pl5">아이디</td>
+										<td class = "tl pl5"><input type = "text" name = "uid"></td>
 									</tr>
 									<tr>
-										<td>제목</td>
-										<td class = "tl pl5"><input type = "text" name = "title"></td>
+										<td class = "tl pl5">비밀번호</td>
+										<td class = "tl pl5"><input type = "password" name = "upwd"></td>
 									</tr>
-									<tr>
-										<td>내용</td>
-										<td><textarea name = "content" cols = "100" rows = "10" placeholder = "내용을 입력하세요."></textarea></td>
-									</tr>
-									<tr>
-										<td>비밀번호</td>
-										<td class = "tl pl5"><input type = "password" name = "pwd"></td>
-									</tr>
-
 								</tbody>
 							</table>
 							<div>
-								<input type = "submit" value = "SUBMIT">
-								<input type = "button" value = "CANCEL" onclick = "location.href='/views/board/guestbook/guestbook.jsp'">
+								<input type = "submit" value = "LOGIN">
 							</div>
 						</form>
-						
 					</div>
+					<%
+						} else {
+					%>
+					<div class="ft12">
+						<br><br>
+						<%=sid %>님 하이헬로안녕?<br>
+						<br><br>
+					</div>
+					<input type = "button" value = "LOGOUT" onclick = "location.href='/views/board/qna/loginSTDout.jsp'">
+					<%
+						}
+					%>
 				</div>
 			</div>
 		</div>
 		<div class="footer"><span>copy right</span></div>
 	</div>
-
-
+		
 
 </body>
 </html>
