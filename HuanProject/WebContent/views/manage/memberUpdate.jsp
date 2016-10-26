@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ page import = "com.farmer.huan.DBConfig" %>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <!doctype html>
 <html lang="ko">
@@ -11,6 +12,27 @@
   <meta name="Description" content="">
   <title>Document</title>
   <link rel="stylesheet" href="/css/layout.css" />
+  <%
+		/* 
+			- 세션관리 -
+			 1. 로그인할 때의 값을 가지고 세션 생성
+			 	HttpSession se = request.getSession();
+			 2. 생성된 세션을 불러오기 위해 Map Collection 선언
+			 	Map<String, Object> logMap;
+			 3. HttpSession 클래스에 저장되어 있는 logMap 데이터를 Map으로 형변환 하여 다시 대입 
+			 	logMap = (Map<String, Object>) se.getAttribute("logMap");
+			 4. 만약 logMap에 데이터가 들어가 있다면 sid에 logMap에 있는 key값인 "id"를 String 자료형으로 형변환 하여 대입
+			 	if(logMap != null){ sid = (String) logMap.get("id"); }
+			
+		*/
+		String sid = "";
+		HttpSession se = request.getSession();
+		Map<String, Object> logMap = (Map<String, Object>) se.getAttribute("logMap");
+	
+		if (logMap != null) {
+			sid = (String) logMap.get("id");
+		}
+	%>
  </head>
  <body>
 		<div class="wrap">
@@ -20,9 +42,21 @@
 						<img src="/img/FamHuan.png" />
 						<div class="login">
 							<div>
-								<a href="/views/manage/login.jsp">로그인</a> | 
-								<a href="/views/manage/regist.jsp">회원가입</a>
-							</div>
+							<%
+								// String형의 sid에 null값이거나 ""의 값을 가질 경우
+								if(sid == "" || sid == null){
+							%>
+							<a href="/">메인화면</a> | 
+							<a href="/views/manage/regist.jsp">회원가입</a>
+							<%
+								} else {
+							%>
+								<%= sid  %>님 | 
+								<a href = "/views/manage/logout.jsp">로그아웃</a>
+							<%
+								}
+							%>
+						</div>
 						</div>
 					</div>
 				</div>
@@ -40,11 +74,11 @@
 					<div class="left">
 						<ul>
 							<li><a href="/views/manage/login.jsp">로   그   인</a></li>
-						<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
-						<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
-						<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
-						<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
-						<li><a href="/views/manage/memberUpdate.jsp">회 원 관 리</a></li>
+							<li><a href="/views/manage/regist.jsp">회 원 가 입</a></li>
+							<li><a href="/views/manage/memberList.jsp">회 원 목 록</a></li>
+							<li><a href="/views/manage/update.jsp">회원정보수정</a></li>
+							<li><a href="/views/manage/delete.jsp">회 원 탈 퇴</a></li>
+							<li><a href="/views/manage/memberUpdate.jsp">회 원 관 리</a></li>
 						</ul>
 					</div>
 					<div class="content">
@@ -99,13 +133,13 @@
 											Timestamp regdate = rs.getTimestamp("regdate");
 									%>
 									<tr>
-										<td><%= rs.getObject("id") %></td>
-										<td><%= rs.getObject("pwd") %></td>
-										<td><%= rs.getObject("phone") %></td>
-										<td><%= rs.getObject("email") %></td>
-										<td><%= rs.getObject("regdate") %></td>
+										<td><%= rs.getString("id") %></td>
+										<td><%= rs.getString("pwd") %></td>
+										<td><%= rs.getString("phone") %></td>
+										<td><%= rs.getString("email") %></td>
+										<td><%= rs.getString("regdate") %></td>
 										<td> <a href = "/views/manage/delete.jsp?id=<%= id %>"> 삭제</a></td>
-										<td> <a href = "/views/manage/update.jsp?id=<%= id %>"> 수정</a></td>
+										<td> <a href = "/views/manage/update.jsp"> 수정</a></td>
 									</tr>
 									<%
 										}

@@ -7,8 +7,6 @@
 
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String db_id = DBConfig.DB_ID;
-	String db_pwd = DBConfig.DB_PW;
 
 	int i = 0;
 
@@ -53,7 +51,7 @@
 		Class.forName(driver);
 		out.println("jdbc 드라이브 메모리에 로드 <br/>");
 		
-		conn = DriverManager.getConnection(url, db_id, db_pwd);
+		conn = DriverManager.getConnection(url, DBConfig.DB_ID, DBConfig.DB_PW);
 		out.println("DriverManager 클래스는 <br/> static 메소드인 getConnection()메소드를 이용해서<br/>"); 
 		out.println("DB와 연결된 Connection 객체를 반환한다.<br/>");
 		out.println("Connection 객체는 DB와의 연결을 담당하는 객체이다.<br/>");

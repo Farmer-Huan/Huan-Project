@@ -8,8 +8,6 @@
 	// DB 연결 확인
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String db_id = DBConfig.DB_ID;
-	String db_pwd = DBConfig.DB_PW;
 
 	int i = 0;
 
@@ -17,7 +15,7 @@
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 
-	// ? 라는 id를 fh_tb_user 테이블에서 모두 가져오세요.
+	// id 컬럼에서 ?라는 아이디를 fh_tb_user테이블에서 찾아 pwd 컬럼에 있는지 확인 
 	StringBuffer sql = new StringBuffer();
 	sql.append("select pwd "		);
 	sql.append("from fh_tb_user "	);
@@ -26,7 +24,7 @@
 	try {
 		
 		Class.forName(driver);
-		conn = DriverManager.getConnection(url, db_id, db_pwd);
+		conn = DriverManager.getConnection(url, DBConfig.DB_ID, DBConfig.DB_PW);
 		
 		// 쿼리문으로 아이디 확인
 		pstmt = conn.prepareStatement(sql.toString());
@@ -35,15 +33,25 @@
 		rs = pstmt.executeQuery();
 		// 아이디 존재 여부 > 비밀번호 체크
 		if(rs.next()){
+			
 			out.println("아이디가 존재한다.");
+			
 			if(pwd.equals(rs.getString("pwd"))){
 				out.println("로그인 성공");
+				// 로그인 시 세션 생성
+				HttpSession se = request.getSession();
+				Map<String, Object> logMap = new HashMap<String, Object>();
+				logMap.put("id", id);
+				// Session에 data Set
+				se.setAttribute("logMap", logMap);
+				// Session 가지고 "/"로 Redirect
 				response.sendRedirect("/views/manage/memberList.jsp");
 			} else {
 				out.println("패스워드 불일치");
 %>
 				<script>
 					alert("비밀번호가 맞지 않습니다.");
+					history.go(-1);
 				</script>
 <%
 			}
@@ -53,7 +61,7 @@
 			<script>
 				alert("아이디가 존재하지 않습니다.");
 				history.go(-1);
-			</script>		
+			</script>
 <%
 		}
 		
@@ -65,6 +73,7 @@
 	} catch (Exception e){
 		out.println("예외 발생");
 	} finally {
+		// 순서 생각해서 close 할 것
 		if(rs != null){
 			try{
 				rs.close();
@@ -85,13 +94,4 @@
 		}
 	}
 	
-	// 성공 했을 경우
-	// Session 생성
-	HttpSession ssn = request.getSession();
-	Map<String, Object> logMap = new HashMap<String, Object>();
-	out.println(id);
-	logMap.put("id", id);
-	// Session에 Data Set
-	ssn.setAttribute("logMap", logMap);
-	// MemberList 이동
 %>
