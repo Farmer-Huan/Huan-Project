@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ page import = "com.farmer.huan.DBConfig" %>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java.sql.*" %>
 <!doctype html>
 <html lang="ko">
@@ -12,9 +13,25 @@
 	<title>Document</title>
 	<link rel="stylesheet" href="/css/layout.css" />
 	<%
-		request.setCharacterEncoding("utf-8");
-		
-		String id = request.getParameter("id");
+		/* 
+			- 세션관리 -
+			 1. 로그인할 때의 값을 가지고 세션 생성
+			 	HttpSession se = request.getSession();
+			 2. 생성된 세션을 불러오기 위해 Map Collection 선언
+			 	Map<String, Object> logMap;
+			 3. HttpSession 클래스에 저장되어 있는 logMap 데이터를 Map으로 형변환 하여 다시 대입 
+			 	logMap = (Map<String, Object>) se.getAttribute("logMap");
+			 4. 만약 logMap에 데이터가 들어가 있다면 sid에 logMap에 있는 key값인 "id"를 String 자료형으로 형변환 하여 대입
+			 	if(logMap != null){ sid = (String) logMap.get("id"); }
+			
+		*/
+		String sid = "";
+		HttpSession se = request.getSession();
+		Map<String, Object> logMap = (Map<String, Object>) se.getAttribute("logMap");
+	
+		if (logMap != null) {
+			sid = (String) logMap.get("id");
+		}
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -22,12 +39,10 @@
 		
 		String driver = "oracle.jdbc.OracleDriver";
 		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String db_id = DBConfig.DB_ID;
-		String db_pwd = DBConfig.DB_PW;
 		
 		try {
 			Class.forName(driver);
-			conn = DriverManager.getConnection(url, db_id, db_pwd);
+			conn = DriverManager.getConnection(url, DBConfig.DB_ID, DBConfig.DB_PW);
 			// where = 조건
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * ");
@@ -36,9 +51,23 @@
 
 			pstmt = conn.prepareStatement(sql.toString());
 		
-			pstmt.setString(1,id);
+			pstmt.setString(1, sid);
 			rs = pstmt.executeQuery();
 	%>
+	<script type="text/javascript">
+	
+		function dataSubmit(){
+			var upFrom = document.upForm;
+			
+			if(upForm.pwd.value != upForm.pwd_check.value){
+				alert("비밀번호가 다릅니다.");
+				return;
+			}
+			upForm.action = "/views/manage/updateOK.jsp";
+			upForm.submit();
+		}
+	
+	</script>
 </head>
 <body>
 	<div class="wrap">
@@ -48,8 +77,20 @@
 					<img src="/img/FamHuan.png" />
 					<div class="login">
 						<div>
+							<%
+								// String형의 sid에 null값이거나 ""의 값을 가질 경우
+								if(sid == "" || sid == null){
+							%>
 							<a href="/">메인화면</a> | 
-							<a href="/views/manage/login.jsp">로그인</a>
+							<a href="/views/manage/regist.jsp">회원가입</a>
+							<%
+								} else {
+							%>
+								<%= sid  %>님 | 
+								<a href = "/views/manage/logout.jsp">로그아웃</a>
+							<%
+								}
+							%>
 						</div>
 					</div>
 				</div>
@@ -90,7 +131,7 @@
 								String email = rs.getString("email");
 								Timestamp regdate = rs.getTimestamp("regdate");
 						%>
-						<form method = "post" name = "upForm" id = "upForm" action = "/views/manage/updateOK.jsp">
+						<form method = "post" name = "upForm" id = "upForm" action = "">
 							<table>
 								<colgroup>
 									<col width="100px" />
@@ -99,7 +140,7 @@
 								<tbody>
 									<tr>
 										<th>아이디</th>
-										<td><%= id %><input type="hidden" name = "id" value = "<%= id %>" /></td>
+										<td><%= sid %><input type="hidden" name = "id" value = "<%= sid %>" /></td>
 									</tr>
 									<tr>
 										<th>비밀번호</th>
@@ -124,7 +165,6 @@
 								</tbody>
 							</table>
 						</form>
-						
 						<%
 								}
 							} catch (SQLException sqle){
@@ -140,23 +180,16 @@
 									if (conn != null){
 										conn.close();
 									}
-								} catch (SQLException se){
-									out.println(se.getMessage());
+								} catch (SQLException s){
+									out.println(s.getMessage());
 								}
 							}
 						%>
+						
 						<div class = "btn">
-							<a href = "javascript:upForm.submit();">저장</a>
+							<a href = "javascript:dataSubmit();">저장</a>
 							<a href = "/views/manage/memberList.jsp">회원목록</a>
 						</div>
-						<script>
-							function update(){
-								document.upForm.submit();
-							}
-							function list(){
-								location.href = "/views/manage/memberList.jsp";
-							}
-						</script>
 					</div>
 					<!-- regist end -->
 				</div>
