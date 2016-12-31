@@ -1,0 +1,23 @@
+# Atom
+https://atom.io/
+1.12.7
+
+
+# Settings & Config
+
+1. remove vertical gray line
+ - Wrap-Guide Enable > Disable
+
+2. auto trailing white space disable
+ - File > Settings > Editor > Editor Settings > Packages list
+ - search 'whitespace'
+ - Whitespace > Settings > Remove Trailing whitespace (uncheck)
+  or 
+
+ - File > Config
+   whitespace:
+    removeTrailingWhitespace: false
+
+3. install minimap
+ - File > Settings > install
+ - search 'minimap' > install
