@@ -19,6 +19,13 @@ hs_err_pid*
 /RemoteSystemsTempFiles/
 /Servers/
 /.recommenders/
+
 .merge*
 
-
+# Spring Huan
+/SpringHuan/.metadata/
+/SpringHuan/RemoteSystemsTempFiles/
+/SpringHuan/.recommenders/
+/SpringHuan/Servers/
+/SpringHuan/HuanProject_20/.gradle/
+#/SpringHuan/HuanProject_20/.settings/
