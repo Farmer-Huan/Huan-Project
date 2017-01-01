@@ -1,0 +1,65 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+version = '1.0'
+	
+/*
+ * http://www.mkyong.com/spring-mvc/gradle-spring-mvc-web-project-example/
+ * https://mvnrepository.com/
+ * https://docs.gradle.org/current/userguide/artifact_dependencies_tutorial.html
+ */
+	
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                   'Implementation-Version': version
+    }
+}
+
+repositories {
+	mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    compile 'org.springframework:spring-webmvc:4.3.5.RELEASE'
+    compile 'org.slf4j:slf4j-api:1.7.22'
+
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+// [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
+
+eclipse {
+    project.natures 'org.springsource.ide.eclipse.gradle.core.nature'
+    wtp {
+        facet {
+            facet name: 'jst.web', version: '3.1'
+            facet name: 'jst.java', version: '1.8'
+        }
+    }
+    /*
+    component {
+    	contextPath = 'HuanProject_20'
+    }
+    */
+}
+
