@@ -13,7 +13,6 @@ https://atom.io/
  - search 'whitespace'
  - Whitespace > Settings > Remove Trailing whitespace (uncheck)
   or 
-
  - File > Config
    whitespace:
     removeTrailingWhitespace: false
@@ -21,3 +20,6 @@ https://atom.io/
 3. install minimap
  - File > Settings > install
  - search 'minimap' > install
+
+# ref
+http://nyears.tistory.com/26
