@@ -28,4 +28,4 @@ hs_err_pid*
 /SpringHuan/.recommenders/
 /SpringHuan/Servers/
 /SpringHuan/HuanProject_20/.gradle/
-#/SpringHuan/HuanProject_20/.settings/
+/SpringHuan/HuanProject_20/.settings/org.eclipse.jdt.core.prefs

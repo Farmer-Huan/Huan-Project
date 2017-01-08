@@ -11,7 +11,7 @@
 	<!-- <link rel="stylesheet" href="/WEB-INF/css/layout.css" /> -->
 	<link rel="stylesheet" type="text/css" href="/css/layout.css" />
 	<!-- <link rel="text/css" href="<c:url value='/WEB-INF/css/layout.css'/>" /> -->
-	<script type="text/javascript" src="/js/main.js"></script>
+	<script type="text/javascript" src="/HuanProject/js/main.js"></script>
 	
 	<title>HuanProject</title>
 </head>
