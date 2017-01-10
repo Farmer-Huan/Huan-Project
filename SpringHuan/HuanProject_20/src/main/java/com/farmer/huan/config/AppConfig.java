@@ -1,6 +1,7 @@
 package com.farmer.huan.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -9,8 +10,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
  
 import com.farmer.huan.MainController;
- 
+
 @Configuration
+@ComponentScan(basePackages = { "com.farmer.huan" })
 @EnableWebMvc
 public class AppConfig extends WebMvcConfigurerAdapter {
  
@@ -22,8 +24,10 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // TODO Auto-generated method stub
+    	// http://stackoverflow.com/questions/14386383/setting-resource-paths-programatically-in-spring-mvc
 //    	super.addResourceHandlers(registry);
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+//        registry.addResourceHandler("/resources/images/**").addResourceLocations("/resources/images/");
         
     }
  
